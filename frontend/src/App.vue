@@ -1,28 +1,13 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app color="purple"
-    >
-    </v-app-bar>
-
-    <v-content>
-      <Accueil/>
-    </v-content>
-  </v-app>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import Accueil from './components/Accueil';
 
 export default {
-  name: 'App',
-
-  components: {
-    Accueil,
-  },
-
-  data: () => ({
-    //
-  }),
+  name: "App"
 };
+
 </script>
