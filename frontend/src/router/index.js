@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 
 import Home from '../components/Home'
 import Login from '../components/Login'
-import SignIn from '../components/SignIn'
+import SignUp from '../components/SignUp'
+import ActualityWall from '../components/ActualityWall'
 
 Vue.use(VueRouter)
 
@@ -19,9 +20,14 @@ Vue.use(VueRouter)
     component: Login
   },
   {
-    path: '/signin',
-    name: 'signin',
-    component: SignIn
+    path: '/signup',
+    name: 'signup',
+    component: SignUp
+  },
+  {
+    path:'/actualityWall',
+    name: 'actualityWall',
+    component: ActualityWall
   }
 ]
 

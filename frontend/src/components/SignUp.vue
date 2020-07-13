@@ -4,9 +4,11 @@
 
     <v-main>
       <v-card>
-        <v-card-title>Connexion</v-card-title>
+        <v-card-title>Inscription</v-card-title>
         <v-card-text>
           <v-form ref="form" v-model="isValid">
+            <v-text-field label="Nom" v-model="firstName" required></v-text-field>
+            <v-text-field label="Prénom" v-model="lastName" required></v-text-field>
             <v-text-field label="Email" v-model="email" :rules="emailRules" required></v-text-field>
             <v-text-field
               label="Mot de passe"
@@ -18,7 +20,7 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn type="submit" @click="submit" value="submit" color="blue" :disabled="!isValid">Se connecter</v-btn>
+          <v-btn type="submit" @click="submit" value="submit" color="blue" :disabled="!isValid">Valider</v-btn>
           <v-btn @click="clear">Annuler</v-btn>
         </v-card-actions>
       </v-card>
@@ -28,20 +30,25 @@
 
 <script>
 import BarUp from "../layouts/BarUp";
+//import axios from "axios"
 
 export default {
-  name: "Login",
+  name: "SignUp",
   components: {
     BarUp
   },
 
   data() {
     return {
-    email: '', 
-    password: '', 
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
     isValid: true,
-    emailRules: [v => !!v || "Veuillez renseigner un email",
-    v => /.+@.+/.test(v) || "Veuillez reseigner un email valide"],
+    emailRules: [
+      v => !!v || "Veuillez renseigner un email valide",
+      v => /.+@.+/.test(v) || "Veuillez reseigner un email valide"
+    ],
     passwordRules: [
       v => !!v || "Veuillez renseigner votre mot de passe",
       v => (v && v.length >= 5) || "Le mot de passe devrait avoir 7 caractères minimum",
@@ -52,6 +59,7 @@ export default {
   },
 
   methods: {
+    
     submit() {
       this.$refs.form.validate()
     },
@@ -59,6 +67,22 @@ export default {
     clear() {
       this.$refs.form.reset()
     }
+
+    /*createUserSubmit () {
+      const formdata = new FormData()
+      formdata.append('firstName', this.firstName)
+      formdata.append('lastName', this.lastName)
+      formdata.append('email', this.email)
+      formdata.append('password', this.password)
+
+      axios.post('/signup', formdata)
+      .then(function (response) {
+        console.log(response)
+      })
+      .cath(function (error) {
+        console.log(error)
+      })
+    }*/
   }
 };
 </script>
