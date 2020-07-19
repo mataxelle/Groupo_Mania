@@ -6,13 +6,19 @@
       <v-container>
         <!--<v-img src="../assets/people.jpg" alt="image of people"></v-img>-->
       </v-container>
+
       <v-container>
-        <v-tabs grow>
+        <v-tabs grow color="purple">
           <v-tab>Connexion</v-tab>
-          <v-tab to="/signup">Créer un compte</v-tab>
         </v-tabs>
         <Login />
       </v-container>
+
+      <v-container>
+        <v-tabs grow color="purple">
+          <v-tab to="/signup">Créer un compte si première connexion</v-tab>
+        </v-tabs>
+        </v-container>
     </v-main>
   </v-container>
 </template>
