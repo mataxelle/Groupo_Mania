@@ -58,23 +58,27 @@ export default {
 
   methods: {
 
-    submitForm () {
+    submitForm (e) {
+
+      e.preventDefault();
       console.log('HELLLLLLOO')
       if (this.firstName == null || this.lastName == null || this.email == null || this.password == null) {
         return false;
       }
 
-      const formdata = new FormData()
-      formdata.append('firstName', this.firstName)
-      formdata.append('lastName', this.lastName)
-      formdata.append('email', this.email)
-      formdata.append('password', this.password)
-
-      axios.post('auth/signup', formdata) 
+      const formdata = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        password: this.password
+      }
+      
+      axios.post('http://localhost:3000/api/auth/signup', formdata) 
       .then(response => {
+        this.resp = response;
         console.log(response)
       })
-      .cath(error => {
+      .catch(error => {
         console.log(error)
       })
     },

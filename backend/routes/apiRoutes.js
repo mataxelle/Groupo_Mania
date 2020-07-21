@@ -16,6 +16,8 @@ exports.router = (function () {
 
     apiRoutes.post('/auth/logout/', auth, userCtrl.logout);
 
+    apiRoutes.get('/users/', auth, userCtrl.getAllUsers);
+
     apiRoutes.get('/users/profil/', auth, userCtrl.getUserProfil);
 
     apiRoutes.put('/users/profil/', auth, multer, userCtrl.updateUserProfil);
@@ -24,7 +26,7 @@ exports.router = (function () {
 
 
     // Article
-    apiRoutes.post('/articles/', auth, multer, articleCtrl.createArticle);
+    apiRoutes.post('/articles/', multer, articleCtrl.createArticle);
 
     apiRoutes.get('/articles/', auth, articleCtrl.getAllArticle);
 

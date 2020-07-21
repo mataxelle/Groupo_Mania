@@ -26,19 +26,19 @@ exports.signup = (req, res) => {
 
   if (!firstName) {
     console.log('fn manquant')
-    //return res.status(400).json({ error: 'Certains champs sont manquants !' });
+    return res.status(400).json({ error: 'Certains champs sont manquants !' });
   };
   if (!lastName) {
     console.log('ln manquant')
-    //return res.status(400).json({ error: 'Certains champs sont manquants !' });
+    return res.status(400).json({ error: 'Certains champs sont manquants !' });
   };
   if (!email) {
     console.log('email manquant')
-    //return res.status(400).json({ error: 'Certains champs sont manquants !' });
+    return res.status(400).json({ error: 'Certains champs sont manquants !' });
   };
   if (!password) {
     console.log('pw manquant')
-    //return res.status(400).json({ error: 'Certains champs sont manquants !' });
+    return res.status(400).json({ error: 'Certains champs sont manquants !' });
   };
 
   if (firstName.length <= 1 || firstName.length >= 20) {
@@ -73,7 +73,7 @@ exports.signup = (req, res) => {
             isAdmin: 0 // Pour forcer que le nouvel utilisateur ne soit pas Admin
           })
             .then(createUser => {
-              return res.status(201).json({ userId: createUser.id }) // retourne l'id du nouvel utilisateur
+              return res.status(201).json({ userId: createUser.id, message: 'Utilisateur créé !' }) // retourne l'id du nouvel utilisateur
             })
             .catch(error => {
               return res.status(500).json({ error })
@@ -104,12 +104,16 @@ exports.login = (req, res, next) => {
     return res.status(400).json({ error: ' Adresse email non valide!' });
   };
 
+  /*if (!PASSWORD_REGEX.test.password) {
+    return res.status(400).json({ error: 'Mot de passe invalide. Doit contenir entre 7 et 12 caractères, dont au moins un chiffre !' });
+  }*/
+
   models.User.findOne({
     where: { email: email }
-  }) 
+  })
     .then(user => {
       if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+        return res.status(401).json({ error: 'Utilisateur inconnu !' });
       }
       bcrypt.compare(password, user.password)
         .then(valid => {
@@ -128,27 +132,48 @@ exports.login = (req, res, next) => {
             )
           });
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => res.status(401).json({ error }));
     })
     .catch(error => res.status(500).json({ error }))
 };
 
 
-///////////////////////////// Login ///////////////////////////
+///////////////////////////// Logout ///////////////////////////
 
 exports.logout = (req, res, next) => {
 
   const id = req.body.id;
 
-  models.User.findOne({ 
+  models.User.findOne({
+    attributes: ['id', 'firstName', 'lastName', 'email'],
     where: { id: id }                // A TERMINER
   })
-    .then()
+    .then(user => {
+      if (!user) return res.status(400).json({ error: "Utilisateur inexistant !" });
+
+      return res.status(200).json({
+        success: 'Déconnexion réussie !'
+      });
+    })
     .catch(error => res.status(500).json({ error }));
 };
 
 
-///////////////////////////// Profil /////////////////////
+//////////////////// All users ///////////////////////////
+
+exports.getAllUsers = (req, res, next) => {
+
+  var id = req.body.id;
+
+  models.User.findAll({
+    where: { id: id }
+  })
+    .then(users => res.json(users))
+    .catch(error => res.status(500).json({ error: 'Aucune données !' }))
+}
+
+
+///////////////////////////// Get user profile /////////////////////
 
 exports.getUserProfil = (req, res, next) => {
 
@@ -168,10 +193,86 @@ exports.getUserProfil = (req, res, next) => {
     .catch((error) => res.status(404).json({ error: error }));
 };
 
+
+/////////////////// Update Profile /////////////////
+
 exports.updateUserProfil = (req, res, next) => {
 
+  const id = req.body.id;
+
+  var firstName = req.body.firstName;
+  var lastName = req.body.lastName;
+  var email = req.body.email;
+
+  if (!firstName) {
+    console.log('fn manquant')
+    return res.status(400).json({ error: 'Attention champs vide !' });
+  };
+
+  if (!lastName) {
+    console.log('ln manquant')
+    return res.status(400).json({ error: 'Attention champs vide !' });
+  };
+
+  if (!email) {
+    console.log('email manquant')
+    return res.status(400).json({ error: 'Attention champs vide !' });
+  };
+
+  if (firstName.length <= 1 || firstName.length >= 20) {
+    return res.status(400).json({ error: 'Votre prénom doit avoir entre 2 et 19 Caractères !' });
+  };
+
+  if (lastName.length <= 1 || lastName.length >= 20) {
+    return res.status(400).json({ error: 'Votre nom doit avoir entre 2 et 19 Caractères !' });
+  };
+
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ error: ' Adresse email non valide!' });
+  }
+
+  models.User.findOne({
+    where: { id: id }
+  })
+    .then(user => {
+      if (!user) {
+        return res.status(401).json({ error: 'Utilisateur inconnu !' });
+      }
+      models.User.update({               /// A terminer
+        firstname: "",
+        lastname: "",
+        email: "",
+        updatedAt: new Date()  // Date de la modification
+      })
+      .then()
+      .catch((error) => res.status(404).json({ error: error }))
+    })
+    .catch((error) => res.status(404).json({ error: error }))
 };
+
+
+////////////////////// Delete profil //////////////
 
 exports.deleteUserProfil = (req, res, next) => {
 
+  const id = req.body.id;
+
+  models.User.findOne({
+    where: { id: id }
+  })
+  .then(user => {
+    if (!user) {
+      return res.status(401).json({ error: 'Utilisateur inconnu !' });
+    }
+
+    models.User.destroy({
+      attributes: ['id', 'firstName', 'lastName', 'email', 'password'],
+      where: { id: id }
+    })
+      .then(() => {
+        res.status(201).json({ message: 'Compte supprimé !' })
+      })
+      .catch((error) => res.status(404).json({ error: error }));
+  })
+  .catch((error) => res.status(404).json({ error: error }))
 };

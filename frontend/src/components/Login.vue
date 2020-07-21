@@ -26,7 +26,7 @@
 
 <script>
 import BarUp from "../layouts/BarUp";
-//import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "Login",
@@ -64,7 +64,19 @@ export default {
       if (this.email == null || this.password == null) {
         return false;
       }
-      console.log('loggggggg')
+
+      const formdata = {
+        email: this.email,
+        password: this.password
+      }
+
+      axios.post('http://localhost:3000/api/auth/login', formdata) 
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
   }
 };
