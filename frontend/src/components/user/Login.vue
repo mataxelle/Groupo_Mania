@@ -15,8 +15,13 @@
               :rules="passwordRules"
               required
             ></v-text-field>
-            <v-btn type="submit" value="submit" color="blue" :disabled="!isValid">Se connecter</v-btn>
-            <v-btn @click="clear">Annuler</v-btn>
+                <v-btn
+                  type="submit"
+                  value="submit"
+                  color="blue"
+                  small
+                >Connexion</v-btn>
+                <v-btn @click="clear" small>Annuler</v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -25,8 +30,9 @@
 </template>
 
 <script>
-import BarUp from "../layouts/BarUp";
+import BarUp from "@/layouts/BarUp";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default {
   name: "Login",
@@ -60,6 +66,10 @@ export default {
       this.$refs.form.reset();
     },
 
+    validate() {
+      this.$refs.form.validate();
+    },
+
     loginForm() {
       if (this.email == null || this.password == null) {
         return false;
@@ -68,15 +78,22 @@ export default {
       const formdata = {
         email: this.email,
         password: this.password
-      }
+      };
 
-      axios.post('http://localhost:3000/api/auth/login', formdata) 
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+      axios
+        .post("http://localhost:3000/api/auth/login", formdata)
+        .then(response => {
+          localStorage.setItem("userTkn", JSON.stringify(response.data.token));
+          localStorage.setItem("userId", JSON.stringify(response.data.userId));
+          Swal.fire("Bonjour,", "bonne navigation !");
+          this.$router.replace({
+            name: "actualityWall",
+            params: { message: response.data }
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

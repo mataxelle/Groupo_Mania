@@ -19,6 +19,7 @@ exports.createArticle = (req, res, next) => {
     };
 
     models.User.findOne({
+        attributes: ['id', 'firstname', 'lastname', 'email'],
         where: { id: userId }
     })
         .then(user => {
@@ -49,7 +50,7 @@ exports.createArticle = (req, res, next) => {
 exports.getOneArticle = (req, res, next) => {
 
     models.Article.findOne({
-        where: { id: id }, 
+        where: { id: id },
         include: [{
             model: models.User,
             attributes: ['firstName', 'lastName']
@@ -76,13 +77,13 @@ exports.getAllArticle = (req, res, next) => {
 
     models.Article.findAll({
         order: [(order != null) ? order.split(':') : ['id', 'DESC']],
-        attributes: (fields !== '*' && fields !== null) ? fields.split(',') : null,
-        limit: (!isNaN(limit)) ? limit : null,
-        offset: (!isNaN(offset)) ? offset : null,
-        include: [{ // Inclure la table User
+        /* attributes: (fields !== '*' && fields !== null) ? fields.split(',') : null,
+         limit: (!isNaN(limit)) ? limit : null,
+         offset: (!isNaN(offset)) ? offset : null,  */
+        /*include: [{ // Inclure la table User
             model: models.User,
             attributes: ['firstName', 'lastName'] // Afficher nom et prénom
-        }]
+        }]*/
     })
         .then(articles => {
             if (articles) {
@@ -101,16 +102,30 @@ exports.getAllArticle = (req, res, next) => {
 exports.modifyArticle = (req, res, next) => {
 
     models.Article.findOne({
-        where: { id: id }, 
+        where: { id: id },
         include: [{
             model: models.User,
             attributes: ['firstName', 'lastName']
         }]
     })
-        .then(article => res.status(200).json(article))
-        .catch(error => {
-            res.status(400).json({ error });
+    .then(article => {
+        if (!article) {
+            return res.status(401).json({ error: 'Article inconnu !' });
+        }
+        
+        if (article.UserId !== req.userId) {
+            if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
+        }
+        
+        models.Message.update({
+            title: title,
+            text: text,
+            updatedAt: new Date()
         })
+        .then(res => {res.status(200).json({ success: 'Modification effectuée !' })
+        .catch((error) => res.status(404).json({ error: error }));})
+    })
+    .catch((error) => res.status(404).json({ error: error }));
 
 };
 
@@ -119,17 +134,28 @@ exports.modifyArticle = (req, res, next) => {
 exports.deleteArticle = (req, res, next) => {
 
     models.Article.findOne({
-        where: { id: id }, 
+        where: { id: id },
         include: [{
             model: models.User,
             attributes: ['firstName', 'lastName']
         }]
     })
-        .then(article => res.status(200).json(article))
-        .catch(error => {
-            res.status(400).json({ error });
+    .then(article => {
+        if (!article) {
+            return res.status(401).json({ error: 'Article inconnu !' });
+        }
+        
+        if (article.UserId !== req.userId) {
+            if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
+        }
+        
+        models.Message.destroy({
+            attributes: ['id', 'titre', 'text']
         })
-
+        .then(res => {res.status(200).json({ success: 'Article supprimé !' })
+        .catch((error) => res.status(404).json({ error: error }));})
+    })
+    .catch((error) => res.status(404).json({ error: error }));
 };
 
 

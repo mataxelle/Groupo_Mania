@@ -14,21 +14,21 @@ exports.router = (function () {
 
     apiRoutes.post('/auth/login/', userCtrl.login);
 
-    apiRoutes.post('/auth/logout/', auth, userCtrl.logout);
+    apiRoutes.post('/auth/logout/', auth,  userCtrl.logout);
 
-    apiRoutes.get('/users/', auth, userCtrl.getAllUsers);
+    apiRoutes.get('/users/', userCtrl.getAllUsers);
 
     apiRoutes.get('/users/profil/', auth, userCtrl.getUserProfil);
 
-    apiRoutes.put('/users/profil/', auth, multer, userCtrl.updateUserProfil);
+    apiRoutes.put('/users/profil/', multer, userCtrl.updateUserProfil);
 
-    apiRoutes.delete('/users/profil/', auth, userCtrl.deleteUserProfil);
+    apiRoutes.delete('/users/profil/', userCtrl.deleteUserProfil);
 
 
     // Article
     apiRoutes.post('/articles/', multer, articleCtrl.createArticle);
 
-    apiRoutes.get('/articles/', auth, articleCtrl.getAllArticle);
+    apiRoutes.get('/articles/', articleCtrl.getAllArticle);
 
     apiRoutes.get('/articles/:id', auth, articleCtrl.getOneArticle);
 

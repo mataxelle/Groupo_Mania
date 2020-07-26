@@ -1,0 +1,135 @@
+<template>
+  <v-container>
+    <BarUpInside />
+
+    <v-container>
+      <v-main>
+        <div>
+          <h1 class="titreMur">Messages du mur</h1>
+        </div>
+
+        <div>
+          <v-card>
+            <v-card-title>Quoi de neuf ?</v-card-title>
+          </v-card>
+
+          <v-card class="d-flex my-2">
+              <v-row class="align-center mx-3">
+                <v-col>Une envie de poster un message ?</v-col>
+                <v-col>
+                  <v-btn rounded color="purple lighten-2">
+                    <router-link to="/createMessage" class="color">C'est par ici</router-link>
+                  </v-btn>
+                </v-col>
+              </v-row>
+          </v-card>
+        </div>
+
+        <div class="ifMessage" v-if="messages.length <= 0">Aucune publication disponible !</div>
+
+        <div v-if="messages.length <= 0">
+          <div class="ifMessage">Les publications disponibles !</div>
+
+          <v-card >  <!-- /v-for="message in messages" :key="message.id" -->
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>titre</v-list-item-title>
+                <v-list-item-subtitle><v-icon small>mdi-account-circle</v-icon></v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-img src alt></v-img>
+
+            <v-card-text>contenu</v-card-text>
+
+            <v-card-text>Fait le :</v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-row class="align-center mx-3">
+              <v-col>
+                <v-btn class="align-center mx-3" small text color="blue">Voir les commentaires</v-btn>
+              </v-col>
+              <v-col>
+                <v-row justify="end" class="margin">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="blue">
+                      <v-icon>mdi-thumb-up</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>J'aime</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="red">
+                      <v-icon>mdi-thumb-down</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>J'aime pas</span>
+                </v-tooltip>
+                </v-row>
+              </v-col>
+            </v-row>
+
+          </v-card>
+        </div>
+      </v-main>
+    </v-container>
+  </v-container>
+</template>
+
+<script>
+import BarUpInside from "@/layouts/BarUpInside";
+//import Footer from "@/layouts/Footer";
+import axios from "axios";
+
+export default {
+  name: "ActualityWall",
+  components: {
+    BarUpInside
+    //Footer
+  },
+
+  data: () => {
+    return {
+      user: {},
+      messages: {}
+    };
+  },
+
+  mounted() {
+    axios
+      .get("http://localhost:3000/api/articles")
+      .then(response => {
+        this.messages = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+};
+</script>
+
+<style scoped>
+h1 {
+  text-align: center;
+  color: rgb(240, 196, 0);
+}
+
+.ifMessage {
+  text-align: center;
+  margin: 20px 0px;
+}
+
+.color {
+  text-decoration: none;
+  color: white;
+}
+
+.margin {
+  margin-right: 30px;
+}
+</style>

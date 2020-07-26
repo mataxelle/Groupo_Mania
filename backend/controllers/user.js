@@ -19,11 +19,6 @@ exports.signup = (req, res) => {
   var email = req.body.email;
   var password = req.body.password;
 
-  console.log(req.body.firstName)
-  console.log(req.body.lastName)
-  console.log(req.body.email)
-  console.log(req.body.password)
-
   if (!firstName) {
     console.log('fn manquant')
     return res.status(400).json({ error: 'Certains champs sont manquants !' });
@@ -86,6 +81,7 @@ exports.signup = (req, res) => {
     .catch(err => {
       return res.status(500).json({ error: 'Pas possible' })
     });
+
 };
 
 
@@ -122,10 +118,11 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             userId: user.id,
+            isAdmin: user.isAdmin,
             token: jwt.sign(
               {
                 userId: user.id,
-                //isAdmin: user.isAdmin
+                isAdmin: user.isAdmin
               },
               process.env.S_TOKEN,
               { expiresIn: '14h' }
@@ -134,7 +131,7 @@ exports.login = (req, res, next) => {
         })
         .catch(error => res.status(401).json({ error }));
     })
-    .catch(error => res.status(500).json({ error }))
+    .catch(error => res.status(500).json({ error }));
 };
 
 
@@ -142,11 +139,11 @@ exports.login = (req, res, next) => {
 
 exports.logout = (req, res, next) => {
 
-  const id = req.body.id;
+  const id = req;
 
   models.User.findOne({
-    attributes: ['id', 'firstName', 'lastName', 'email'],
-    where: { id: id }                // A TERMINER
+    attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
+    where: { id: id }
   })
     .then(user => {
       if (!user) return res.status(400).json({ error: "Utilisateur inexistant !" });
@@ -166,9 +163,8 @@ exports.getAllUsers = (req, res, next) => {
   var id = req.body.id;
 
   models.User.findAll({
-    where: { id: id }
   })
-    .then(users => res.json(users))
+    .then(users => res.status(200).json(users))
     .catch(error => res.status(500).json({ error: 'Aucune données !' }))
 }
 
@@ -177,20 +173,21 @@ exports.getAllUsers = (req, res, next) => {
 
 exports.getUserProfil = (req, res, next) => {
 
-  const id = req.body.id;
+  const id = req.userId; //req.params ou req.userId => 401
 
   models.User.findOne({
-    attributes: ['id', 'firstName', 'lastName', 'email'],
+    attributes: ['id', 'firstname', 'lastname', 'email', 'isAdmin'],
     where: { id: id }
   })
     .then(user => {
       if (user) {
         res.status(201).json(user)
+        console.log(user)
       } else {
         res.status(404).json({ error: error })
       }
     })
-    .catch((error) => res.status(404).json({ error: error }));
+    .catch((error) => res.status(404).json({ error }));
 };
 
 
@@ -238,14 +235,16 @@ exports.updateUserProfil = (req, res, next) => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur inconnu !' });
       }
-      models.User.update({               /// A terminer
-        firstname: "",
-        lastname: "",
-        email: "",
+      models.User.update({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
         updatedAt: new Date()  // Date de la modification
       })
-      .then()
-      .catch((error) => res.status(404).json({ error: error }))
+        .then(res => {
+          res.status(200).json({ success: 'Modification effectuée !' })
+        })
+        .catch((error) => res.status(404).json({ error: error }))
     })
     .catch((error) => res.status(404).json({ error: error }))
 };
@@ -258,21 +257,22 @@ exports.deleteUserProfil = (req, res, next) => {
   const id = req.body.id;
 
   models.User.findOne({
+    attributes: ['id', 'firstname', 'lastname', 'email', 'isAdmin'],
     where: { id: id }
   })
-  .then(user => {
-    if (!user) {
-      return res.status(401).json({ error: 'Utilisateur inconnu !' });
-    }
+    .then(user => {
+      if (!user) {
+        return res.status(401).json({ error: 'Utilisateur inconnu !' });
+      }
 
-    models.User.destroy({
-      attributes: ['id', 'firstName', 'lastName', 'email', 'password'],
-      where: { id: id }
-    })
-      .then(() => {
-        res.status(201).json({ message: 'Compte supprimé !' })
+      models.User.destroy({
+        attributes: ['id', 'firstName', 'lastName', 'email', 'password'],
+        where: { id: id }
       })
-      .catch((error) => res.status(404).json({ error: error }));
-  })
-  .catch((error) => res.status(404).json({ error: error }))
+        .then(() => {
+          res.status(201).json({ message: 'Compte supprimé !' })
+        })
+        .catch((error) => res.status(404).json({ error: error }));
+    })
+    .catch((error) => res.status(404).json({ error: error }))
 };

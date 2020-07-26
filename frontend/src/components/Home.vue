@@ -14,10 +14,8 @@
         <Login />
       </v-container>
 
-      <v-container>
-        <v-tabs grow color="purple">
-          <v-tab to="/signup">Créer un compte si première connexion</v-tab>
-        </v-tabs>
+      <v-container class="center">
+          <router-link class="link" to="/signup">Créer un compte si première connexion</router-link>
         </v-container>
     </v-main>
   </v-container>
@@ -25,7 +23,7 @@
 
 <script>
 import BarUp from "../layouts/BarUp"
-import Login from "../components/Login"
+import Login from "../components/user/Login"
 
 export default {
   name: "Home",
@@ -38,4 +36,12 @@ export default {
 
 
 <style scoped>
+.center {
+  text-align: center;
+}
+
+.link {
+  color: purple;
+  text-decoration: none;
+}
 </style>
