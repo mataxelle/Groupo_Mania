@@ -64,6 +64,7 @@ import Footer from "@/layouts/Footer";
 import axios from "axios";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
   name: "Profil",
@@ -80,9 +81,9 @@ export default {
 
   mounted() {
     axios
-      .get("http://localhost:3000/api/users/profil", {
+      .get("http://localhost:3000/api/users/profil/" + userId , {
         headers: {
-          Authorization: userToken
+          Authorization: `Bearer ${userToken}`
         }
       })
       .then(response => {

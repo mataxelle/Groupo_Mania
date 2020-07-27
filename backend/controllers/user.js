@@ -65,7 +65,7 @@ exports.signup = (req, res) => {
             lastName: lastName,
             email: email,
             password: bcryptedPassword, // mot de passe crypté
-            isAdmin: 0 // Pour forcer que le nouvel utilisateur ne soit pas Admin
+            isAdmin: false // Pour forcer que le nouvel utilisateur ne soit pas Admin
           })
             .then(createUser => {
               return res.status(201).json({ userId: createUser.id, message: 'Utilisateur créé !' }) // retourne l'id du nouvel utilisateur
@@ -139,7 +139,7 @@ exports.login = (req, res, next) => {
 
 exports.logout = (req, res, next) => {
 
-  const id = req;
+  const id = req.params.id;
 
   models.User.findOne({
     attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
@@ -173,10 +173,10 @@ exports.getAllUsers = (req, res, next) => {
 
 exports.getUserProfil = (req, res, next) => {
 
-  const id = req.userId; //req.params ou req.userId => 401
+  const id = req.params.id;
 
   models.User.findOne({
-    attributes: ['id', 'firstname', 'lastname', 'email', 'isAdmin'],
+    attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
     where: { id: id }
   })
     .then(user => {
@@ -195,8 +195,7 @@ exports.getUserProfil = (req, res, next) => {
 
 exports.updateUserProfil = (req, res, next) => {
 
-  const id = req.body.id;
-
+  const id = req.params.id;
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var email = req.body.email;
@@ -240,11 +239,16 @@ exports.updateUserProfil = (req, res, next) => {
         lastName: lastName,
         email: email,
         updatedAt: new Date()  // Date de la modification
+      }, {
+        where: {
+          id: user.id
+        }
       })
-        .then(res => {
+        .then(resultat => {
           res.status(200).json({ success: 'Modification effectuée !' })
         })
-        .catch((error) => res.status(404).json({ error: error }))
+        .catch((error) => { res.status(404).json({ error: error })
+        })
     })
     .catch((error) => res.status(404).json({ error: error }))
 };
@@ -254,10 +258,10 @@ exports.updateUserProfil = (req, res, next) => {
 
 exports.deleteUserProfil = (req, res, next) => {
 
-  const id = req.body.id;
+  const id = req.params.id;
 
   models.User.findOne({
-    attributes: ['id', 'firstname', 'lastname', 'email', 'isAdmin'],
+    attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
     where: { id: id }
   })
     .then(user => {

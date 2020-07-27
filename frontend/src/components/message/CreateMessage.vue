@@ -5,14 +5,14 @@
     <h1>Nouveau message</h1>
 
     <v-card class="card-space">
-      <v-form ref="form" @submit.prevent="msgForm">
+      <v-form ref="form" @submit.prevent="msgForm" v-model="isValid">
         <div class="space">
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>
-                <v-text-field outlined v-model="title" label="Titre"></v-text-field>
+                <v-text-field outlined v-model="title" label="Titre" type="text"></v-text-field>
               </v-list-item-title>
-              <v-list-item-subtitle>De : {{user.firstName}}</v-list-item-subtitle>
+              <v-list-item-subtitle>De : {{ user.firstName }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="space">
-          <v-textarea outlined v-model="message" label="Mon message"></v-textarea>
+          <v-textarea outlined v-model="text" label="Mon message" type="text"></v-textarea>
         </div>
 
         <div class="space">
@@ -42,6 +42,9 @@ import Footer from "@/layouts/Footer";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userId = JSON.parse(localStorage.getItem("userId"));
+
 export default {
   name: "CreateMessage",
   components: {
@@ -52,27 +55,34 @@ export default {
   data() {
     return {
       title: "",
-      message: "",
-      user: {}
+      text: "",
+      user: {},
+      isValid: true,
     };
   },
 
   methods: {
-    msgForm() {
-      if (this.title == null || this.message == null) {
+    msgForm(e) {
+      e.preventDefault();
+
+      if (this.title == null || this.text == null) {
         return false;
       }
 
-      const message = {
+      const allContent = {
         title: this.title,
-        message: this.message
+        text: this.text
       };
 
       axios
-        .post("http://localhost:3000/api/articles", message)
+        .post("http://localhost:3000/api/articles", allContent, {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
         .then(response => {
-          localStorage.setItem("message", JSON.stringify(response.data.message))
-          Swal.fire("Message créé !");
+          localStorage.setItem("allContent", JSON.stringify(response.data.allContent))
+          Swal.fire("Article créé !");
           this.$router.replace({
             name: "actualityWall",
             params: { message: response.data.success }
@@ -82,6 +92,21 @@ export default {
           console.log(error);
         });
     },
+
+    mounted() {
+    axios
+      .get("http://localhost:3000/api/articles/" + userId , {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
+      .then(response => {
+        this.user = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
 
     clear() {
       this.$refs.form.reset();

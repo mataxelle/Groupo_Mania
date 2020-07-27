@@ -7,7 +7,7 @@
         </div>
 
         <v-form @submit.prevent="commentSubmit" class="form">
-          <v-textarea v-model="content" class="input-message" name="message" id="message" rows="3" placeholder="Votre commentaire..." required></v-textarea>
+          <v-textarea v-model="data.content" class="input-message" name="message" id="message" rows="3" placeholder="Votre commentaire..." required></v-textarea>
           <v-card-text>De :</v-card-text>
           <div class="commentSubBtn">
             <v-btn :disabled="loading" type="submit" small value="Comment" color="blue">Poster un commentaire</v-btn>
@@ -27,7 +27,7 @@ export default {
     data () {
         return {
             loading: false,
-            content: "",
+            data: {},
         }
     },
 
@@ -35,13 +35,15 @@ export default {
     commentSubmit() {
         this.loading = true;
         
-        axios.post("http://localhost/api/articles/", this.content)
-        .thent(response => {
+        axios.post("http://localhost:3000/api/articles/", this.content)
+        .then(response => {
             this.$emit('commented', response.content);
             this.content = ""; // vider
             this.loading = false;
         })
-        .catch()
+        .catch(error => {
+          console.log(error);
+        })
         
     }
   }

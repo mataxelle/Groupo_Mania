@@ -5,8 +5,8 @@
     <v-card>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>jjj</v-list-item-title>
-          <v-list-item-subtitle>De :</v-list-item-subtitle>
+          <v-list-item-title>Titre : {{ article.titre }}</v-list-item-title>
+          <v-list-item-subtitle>De : {{ user.frstName }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -14,7 +14,7 @@
 
       <v-card-text></v-card-text>
 
-      <v-card-text>Fait le</v-card-text>
+      <v-card-text>Fait le : {{ article.createdAt }} </v-card-text>
 
       <v-row class="align-center mx-3">
         <v-col>
@@ -26,6 +26,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="blue">
                   <span>
+                    {{ article.like }}
                     <v-icon>mdi-thumb-up</v-icon>
                   </span>
                 </v-btn>
@@ -36,6 +37,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="red">
                   <span>
+                    {{ article.dislike }}
                     <v-icon>mdi-thumb-down</v-icon>
                   </span>
                 </v-btn>
@@ -50,7 +52,7 @@
     <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
 
     <!--  v-for="comment in comments" :key="comment" :comment="message" -->
-    <Comment />
+    <Comment v-for="comment in comments" :key="comment" :comment="message" />
 
     <!-- v-on:commented="updateComment" -->
     <CommentForm />
@@ -79,7 +81,7 @@ export default {
   data() {
     return {
       user: {},
-      message: {},
+      article: {},
       loading: false,
       comments: {}
     };
@@ -88,7 +90,7 @@ export default {
   created () {
     this.loading = true;
 
-    axios.get("http://localhost/api/articles/")
+    axios.get("http://localhost:3000/api/articles/")
       .then(response => {
         this.comments = response.data;
         this.loading = false;

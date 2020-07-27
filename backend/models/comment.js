@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const Like = sequelize.define('Like', {
+  const Comment = sequelize.define('Comment', {
     articleId: {
       type: DataTypes.INTEGER,
       references: {
@@ -16,31 +16,41 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    isLike: DataTypes.INTEGER
-  }, {});
-  Like.associate = function(models) {
+    commentaire: DataTypes.STRING
+  }, {
+    /*classMethods: {
+      associate: function(models) {
+        models.Comment.belongsTo(models.Article, {
+          foreignKey: {    // La relation de la clé étrangère ne doit pas être null
+            allowNull: false
+          }
+        })
+      }
+    }*/
+  });
+  Comment.associate = function(models) {
 
     models.User.belongsToMany(models.Article, {
-      through: models.Like,
+      through: models.Comment,
       foreignKey: 'userId',
       otherKey: 'articleId',
     });
 
     models.Article.belongsToMany(models.User, {
-      through: models.Like,
+      through: models.Comment,
       foreignKey: 'articleId',
       otherKey: 'userId',
     });
 
-    models.Like.belongsTo(models.User, {
+    models.Comment.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'user',
     });
 
-    models.Like.belongsTo(models.Article, {
+    models.Comment.belongsTo(models.Article, {
       foreignKey: 'messageId',
       as: 'article',
     });
   };
-  return Like;
+  return Comment;
 };

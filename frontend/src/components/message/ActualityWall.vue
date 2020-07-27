@@ -27,10 +27,10 @@
 
         <div class="ifMessage" v-if="messages.length <= 0">Aucune publication disponible !</div>
 
-        <div v-if="messages.length <= 0">
+        <div v-if="messages.length > 0">
           <div class="ifMessage">Les publications disponibles !</div>
 
-          <v-card >  <!-- /v-for="message in messages" :key="message.id" -->
+          <v-card v-for="message in messages" :key="message.id">  <!-- /v-for="message in messages" :key="message.id" -->
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title>titre</v-list-item-title>
@@ -86,6 +86,9 @@ import BarUpInside from "@/layouts/BarUpInside";
 //import Footer from "@/layouts/Footer";
 import axios from "axios";
 
+const userToken = JSON.parse(localStorage.getItem('userTkn'));
+//const userId = JSON.parse(localStorage.getItem("userId"));
+
 export default {
   name: "ActualityWall",
   components: {
@@ -102,7 +105,11 @@ export default {
 
   mounted() {
     axios
-      .get("http://localhost:3000/api/articles")
+      .get("http://localhost:3000/api/articles", {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
       .then(response => {
         this.messages = response.data;
       })

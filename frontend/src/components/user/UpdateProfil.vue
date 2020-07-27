@@ -26,6 +26,9 @@ import BarUpInside from "@/layouts/BarUpInside";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userId = JSON.parse(localStorage.getItem("userId"));
+
 export default {
   name: "UpdateProfil",
   components: {
@@ -64,7 +67,10 @@ export default {
       };
 
       axios
-        .put("http://localhost:3000/api/auth/profil", formdata)
+        .put("http://localhost:3000/api/users/profil/" + userId, formdata, { headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+          })
         .then(response => {
           console.log(response);
           Swal.fire('Modification réussie !')

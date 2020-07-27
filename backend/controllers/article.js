@@ -5,11 +5,12 @@ const ITEMS_LIMIT = 100;
 
 // Création d'un article
 exports.createArticle = (req, res, next) => {
+
     var title = req.body.title;
     var text = req.body.text;
-    var userId = req.body.id;   // id du user?
-
-    console.log(req.body)
+    var image = req.body.imgUrl;
+    var userId = req.params;
+    
     if (title == null || text == null) {
         return res.status(400).json({ error: 'Contenu vide !' })
     };
@@ -19,7 +20,7 @@ exports.createArticle = (req, res, next) => {
     };
 
     models.User.findOne({
-        attributes: ['id', 'firstname', 'lastname', 'email'],
+        attributes: ['id', 'firstName', 'lastName', 'email'],
         where: { id: userId }
     })
         .then(user => {
@@ -30,18 +31,19 @@ exports.createArticle = (req, res, next) => {
             models.Article.create({
                 title: title,
                 text: text,
+                attachement: image,
                 likes: 0,
                 UserId: userId
             })
-                .then(createArt => {
-                    return res.status(201).json({ artId: createArt.id, message: 'Message créé !' }) // retourne l'id du nouvel utilisateur
+                .then(article => {
+                    return res.status(201).json({ artId: article.id, message: 'Message créé !' }) // retourne l'id du nouvel utilisateur
                 })
                 .catch(error => {
                     return res.status(400).json({ error: 'Pas de création' })
                 });
         })
         .catch(error => {
-            res.status(400).json({ error });
+            res.status(400).json({ error: 'NOOOOO' });
         });
 };
 
@@ -108,24 +110,30 @@ exports.modifyArticle = (req, res, next) => {
             attributes: ['firstName', 'lastName']
         }]
     })
-    .then(article => {
-        if (!article) {
-            return res.status(401).json({ error: 'Article inconnu !' });
-        }
-        
-        if (article.UserId !== req.userId) {
-            if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
-        }
-        
-        models.Message.update({
-            title: title,
-            text: text,
-            updatedAt: new Date()
+        .then(article => {
+            if (!article) {
+                return res.status(401).json({ error: 'Article inconnu !' });
+            }
+
+            if (article.UserId !== req.userId) {
+                if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
+            }
+
+            models.Message.update({
+                title: title,
+                text: text,
+                updatedAt: new Date()
+            }, {
+                where: {
+                    id: user.id
+                }
+            })
+                .then(resultat => {
+                    res.status(200).json({ success: 'Modification effectuée !' })
+                })
+                .catch((error) => res.status(404).json({ error: error }));
         })
-        .then(res => {res.status(200).json({ success: 'Modification effectuée !' })
-        .catch((error) => res.status(404).json({ error: error }));})
-    })
-    .catch((error) => res.status(404).json({ error: error }));
+        .catch((error) => res.status(404).json({ error: error }));
 
 };
 
@@ -140,22 +148,24 @@ exports.deleteArticle = (req, res, next) => {
             attributes: ['firstName', 'lastName']
         }]
     })
-    .then(article => {
-        if (!article) {
-            return res.status(401).json({ error: 'Article inconnu !' });
-        }
-        
-        if (article.UserId !== req.userId) {
-            if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
-        }
-        
-        models.Message.destroy({
-            attributes: ['id', 'titre', 'text']
+        .then(article => {
+            if (!article) {
+                return res.status(401).json({ error: 'Article inconnu !' });
+            }
+
+            if (article.UserId !== req.userId) {
+                if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
+            }
+
+            models.Message.destroy({
+                attributes: ['id', 'titre', 'text']
+            })
+                .then(res => {
+                    res.status(200).json({ success: 'Article supprimé !' })
+                    .catch((error) => res.status(404).json({ error: error }));
+                })
         })
-        .then(res => {res.status(200).json({ success: 'Article supprimé !' })
-        .catch((error) => res.status(404).json({ error: error }));})
-    })
-    .catch((error) => res.status(404).json({ error: error }));
+        .catch((error) => res.status(404).json({ error: error }));
 };
 
 
