@@ -47,7 +47,13 @@
           <v-row class="align-center mx-3">
             <v-col cols="7">Supprimer mon compte</v-col>
             <v-col cols="5">
-              <v-btn @click="deleteProfil" rounded color="red darken-1" dark small>Supprimer</v-btn>
+              <v-btn
+                @click="deleteProfil"
+                rounded
+                color="red darken-1"
+                dark
+                small
+              >Supprimer</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -63,35 +69,35 @@ import BarUpInside from "@/layouts/BarUpInside";
 import Footer from "@/layouts/Footer";
 import axios from "axios";
 
-const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userToken = JSON.parse(localStorage.getItem("userTkn"));
 const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
   name: "Profil",
   components: {
     BarUpInside,
-    Footer
+    Footer,
   },
 
   data() {
     return {
-      user: {}
+      user: {},
     };
   },
 
   mounted() {
     axios
-      .get("http://localhost:3000/api/users/profil/" + userId , {
+      .get("http://localhost:3000/api/users/profil/" + userId, {
         headers: {
-          Authorization: `Bearer ${userToken}`
-        }
+          Authorization: `Bearer ${userToken}`,
+        },
       })
-      .then(response => {
+      .then((response) => {
         this.user = response.data;
         console.log(this.user);
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   },
@@ -101,23 +107,23 @@ export default {
       axios
         .delete("http://localhost:3000/api/users/profil", {
           headers: {
-            Authorization: localStorage.userTkn
-          }
+            Authorization: localStorage.userTkn,
+          },
         })
-        .then(response => {
+        .then((response) => {
           if (response.status == 200) {
             localStorage.clear();
             this.$router.replace({
               name: "home",
-              params: { message: "Compte supprimé avec succès ! " }
+              params: { message: "Compte supprimé avec succès ! " },
             });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

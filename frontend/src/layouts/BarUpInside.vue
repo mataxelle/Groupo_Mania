@@ -61,6 +61,14 @@ const userToken = JSON.parse(localStorage.getItem('userTkn'));
 //const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
+  name: 'BarUpInside',
+
+  data () {
+    return {
+      user: {}
+    }
+  },
+
   methods: {
     signout() {
       axios

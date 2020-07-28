@@ -65,7 +65,7 @@ exports.signup = (req, res) => {
             lastName: lastName,
             email: email,
             password: bcryptedPassword, // mot de passe crypté
-            isAdmin: false // Pour forcer que le nouvel utilisateur ne soit pas Admin
+            isAdmin: false
           })
             .then(createUser => {
               return res.status(201).json({ userId: createUser.id, message: 'Utilisateur créé !' }) // retourne l'id du nouvel utilisateur
@@ -160,11 +160,25 @@ exports.logout = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
 
+  /*models.User.findOne({
+    where: { isAdmin: 1 }
+  })
+  .then(admin => {
+    if (!admin) { return res.status(400).json({ error: 'Admin inexistant !'})
+  }
+    models.User.findAll({
+    })
+      .then(users => res.status(200).json(users))
+      .catch(error => res.status(500).json({ error: 'Aucune données !' }))
+  })
+  .catch(error => res.status(500).json({ error }))*/
+
   var id = req.body.id;
 
   models.User.findAll({
+    where: { id: id }
   })
-    .then(users => res.status(200).json(users))
+    .then(users => res.json(users))
     .catch(error => res.status(500).json({ error: 'Aucune données !' }))
 }
 
@@ -247,7 +261,8 @@ exports.updateUserProfil = (req, res, next) => {
         .then(resultat => {
           res.status(200).json({ success: 'Modification effectuée !' })
         })
-        .catch((error) => { res.status(404).json({ error: error })
+        .catch((error) => {
+          res.status(404).json({ error: error })
         })
     })
     .catch((error) => res.status(404).json({ error: error }))

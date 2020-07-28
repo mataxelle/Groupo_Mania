@@ -43,7 +43,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
-const userId = JSON.parse(localStorage.getItem("userId"));
+//const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
   name: "CreateMessage",
@@ -61,6 +61,26 @@ export default {
     };
   },
 
+  headers: {
+    Authorization:
+      'Bearer' + userToken,
+  },
+
+  mounted() {
+    axios
+      .get("http://localhost:3000/api/articles", {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
+      .then(response => {
+        this.user = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
+
   methods: {
     msgForm(e) {
       e.preventDefault();
@@ -75,11 +95,7 @@ export default {
       };
 
       axios
-        .post("http://localhost:3000/api/articles", allContent, {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      })
+        .post("http://localhost:3000/api/articles", allContent)
         .then(response => {
           localStorage.setItem("allContent", JSON.stringify(response.data.allContent))
           Swal.fire("Article créé !");
@@ -92,21 +108,6 @@ export default {
           console.log(error);
         });
     },
-
-    mounted() {
-    axios
-      .get("http://localhost:3000/api/articles/" + userId , {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      })
-      .then(response => {
-        this.user = response.data;
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  },
 
     clear() {
       this.$refs.form.reset();
@@ -126,6 +127,6 @@ h1 {
 }
 
 .space {
-  margin: 30px 100px;
+  margin: 30px 40px;
 }
 </style>

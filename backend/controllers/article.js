@@ -9,7 +9,11 @@ exports.createArticle = (req, res, next) => {
     var title = req.body.title;
     var text = req.body.text;
     var image = req.body.imgUrl;
-    var userId = req.params;
+    var id = req.params; // USER INCON
+    //const id = req.params.id; UNDEFINED
+
+    console.log(req.body)
+    console.log(req.params)
     
     if (title == null || text == null) {
         return res.status(400).json({ error: 'Contenu vide !' })
@@ -21,7 +25,7 @@ exports.createArticle = (req, res, next) => {
 
     models.User.findOne({
         attributes: ['id', 'firstName', 'lastName', 'email'],
-        where: { id: userId }
+        where: { id: id }
     })
         .then(user => {
             if (!user) {
@@ -51,6 +55,8 @@ exports.createArticle = (req, res, next) => {
 // Récupération d'un article
 exports.getOneArticle = (req, res, next) => {
 
+    var id = req.params.id;
+
     models.Article.findOne({
         where: { id: id },
         include: [{
@@ -58,7 +64,12 @@ exports.getOneArticle = (req, res, next) => {
             attributes: ['firstName', 'lastName']
         }]
     })
-        .then(article => res.status(200).json(article))
+        .then(article => {
+            if (article == null) {
+                return res.status(400).json({ error: "Article non disponible !"})
+            }
+            res.status(200).json(article)
+        })
         .catch(error => {
             res.status(400).json({ error });
         })
@@ -102,6 +113,7 @@ exports.getAllArticle = (req, res, next) => {
 
 // Modification d'un article
 exports.modifyArticle = (req, res, next) => {
+
 
     models.Article.findOne({
         where: { id: id },
@@ -160,7 +172,7 @@ exports.deleteArticle = (req, res, next) => {
             models.Message.destroy({
                 attributes: ['id', 'titre', 'text']
             })
-                .then(res => {
+                .then(resultat => {
                     res.status(200).json({ success: 'Article supprimé !' })
                     .catch((error) => res.status(404).json({ error: error }));
                 })
