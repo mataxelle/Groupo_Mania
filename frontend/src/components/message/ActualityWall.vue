@@ -33,7 +33,7 @@
           <v-card v-for="message in messages" :key="message.id">  <!-- /v-for="message in messages" :key="message.id" -->
             <v-list-item>
               <v-list-item-content>
-                <v-list-item-title>titre</v-list-item-title>
+                <v-list-item-title>Titre: <span class="size">{{ message.title }}</span></v-list-item-title>
                 <v-list-item-subtitle><v-icon small>mdi-account-circle</v-icon></v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -42,15 +42,15 @@
 
             <v-img src alt></v-img>
 
-            <v-card-text>contenu</v-card-text>
+            <v-card-text> <span class="size-message">{{ message.text }}</span></v-card-text>
 
-            <v-card-text>Fait le :</v-card-text>
+            <v-card-text class="x-small">Fait le: {{ message.createdAt }}</v-card-text>
 
             <v-divider></v-divider>
 
             <v-row class="align-center mx-3">
               <v-col>
-                <v-btn class="align-center mx-3" small text color="blue">Voir les commentaires</v-btn>
+                <v-btn class="align-center mx-3" small text color="blue" @click="readComment">Voir les commentaires</v-btn>
               </v-col>
               <v-col>
                 <v-row justify="end" class="margin">
@@ -88,6 +88,7 @@ import axios from "axios";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
 //const userId = JSON.parse(localStorage.getItem("userId"));
+const articleId = JSON.parse(localStorage.getItem("articleId"));
 
 export default {
   name: "ActualityWall",
@@ -116,6 +117,26 @@ export default {
       .catch(error => {
         console.log(error);
       });
+  },
+
+  methods: {
+    readComment() {
+      axios
+        .post("http://localhost:3000/api/article/" + articleId, {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
+      .then(response => {
+          this.$router.replace({
+            name: "message",
+            params: { message: response.data.success }
+          });
+        })
+      .catch(error => {
+          console.log(error);
+        })
+    }
   }
 };
 </script>
@@ -126,6 +147,27 @@ h1 {
   color: rgb(240, 196, 0);
 }
 
+.v-list-item__title, .v-card__text {
+  color: rgb(2, 0, 0) !important;
+}
+
+.v-list-item__title {
+  white-space: normal;
+}
+
+.size {
+  color: rgb(199, 61, 61);
+  font-size: larger;
+}
+
+.size-message {
+  font-size: medium;
+}
+
+.x-small {
+  font-size: xx-small;
+}
+
 .ifMessage {
   text-align: center;
   margin: 20px 0px;
@@ -134,6 +176,10 @@ h1 {
 .color {
   text-decoration: none;
   color: white;
+}
+
+.com {
+  text-decoration: none;
 }
 
 .margin {

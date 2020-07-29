@@ -87,7 +87,7 @@ export default {
           localStorage.setItem("userId", response.data.userId);
           Swal.fire("Bienvenue,", "Connectez-vous !");
           this.$router.replace({
-            name: "connexion",
+            name: "login",
             params: { message: response.data.success }
           });
         })

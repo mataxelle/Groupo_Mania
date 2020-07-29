@@ -78,12 +78,12 @@ export default {
         }
       })
         .then(response => {
-          localStorage.clear();
           Swal.fire("Déconnecion réussie !");
           this.$router.replace({
             name: "home",
             params: { message: response.data.success }
           });
+          localStorage.clear();
         })
         .catch(error => {
           console.log(error);

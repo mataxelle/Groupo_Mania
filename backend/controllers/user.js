@@ -160,14 +160,13 @@ exports.logout = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
 
-
-  var admin = true;
-
   models.User.findAll({
-    where: { isAdmin: admin }
+    where: {
+      isAdmin: 1
+    }
   })
   .then(admin => {
-    if (!admin) { return res.status(400).json({ error: 'Admin inexistant !'})
+    if (!admin) { console.log('not admin')
   }
     models.User.findAll({
       order: [

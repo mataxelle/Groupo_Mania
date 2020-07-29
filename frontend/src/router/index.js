@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Swal from "sweetalert2"
 
 import Home from '../components/Home'
 import Login from '../components/user/Login'
@@ -41,52 +42,132 @@ const routes = [
   {
     path: '/profil',
     name: 'profil',
-    component: Profil
+    component: Profil,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
     path: '/updateProfil',
     name: 'updateProfil',
-    component: UpdateProfil
+    component: UpdateProfil,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
     path: '/adminBoard',
     name: 'adminBoard',
-    component: AdminBoard
+    component: AdminBoard,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
-    path:'/actualityWall',
+    path: '/actualityWall',
     name: 'actualityWall',
-    component: ActualityWall
+    component: ActualityWall,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
-    path:'/createMessage',
+    path: '/createMessage',
     name: 'createMessage',
-    component: CreateMessage
+    component: CreateMessage,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
-    path:'/message',
+    path: '/message',
     name: 'message',
-    component: Message
+    component: Message,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
-    path:'/updateMessage',
+    path: '/updateMessage',
     name: 'updateMessage',
-    component: UpdateMessage
+    component: UpdateMessage,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
-    path:'/comment',
+    path: '/comment',
     name: 'comment',
-    component: Comment
+    component: Comment,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
-    path:'/commentForm',
+    path: '/commentForm',
     name: 'commentForm',
-    component: CommentForm
+    component: CommentForm,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   },
   {
-    path:'/about',
+    path: '/about',
     name: 'about',
-    component: About
+    component: About,
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('userTkn') == null) {
+        next({ name: 'home' })
+        Swal.fire('Accès interdit !')
+      } else {
+        next()
+      } next()
+    }
   }
 ];
 

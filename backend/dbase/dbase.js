@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('groupo_mania', 'root', 'Maisonette34%', {
+const sequelize = new Sequelize('groupo_mania', 'root', process.env.D_BASE_PASS, {
     host: 'localhost',
     dialect: 'mysql',
     pool: {     // is optional, it will be used for Sequelize connection pool configuration:

@@ -92,6 +92,7 @@ export default {
           });
         })
         .catch(error => {
+          Swal.fire("Vérifiez vos informations !")
           console.log(error);
         });
     }
