@@ -9,11 +9,12 @@ exports.createArticle = (req, res, next) => {
     var title = req.body.title;
     var text = req.body.text;
     var image = req.body.imgUrl;
-    var id = req.params; // USER INCON
+
+    var userId = req.params; // USER INCON
     //const id = req.params.id; UNDEFINED
 
     console.log(req.body)
-    console.log(req.params)
+    console.log(req.params.id)
     
     if (title == null || text == null) {
         return res.status(400).json({ error: 'Contenu vide !' })
@@ -25,7 +26,7 @@ exports.createArticle = (req, res, next) => {
 
     models.User.findOne({
         attributes: ['id', 'firstName', 'lastName', 'email'],
-        where: { id: id }
+        where: { id: userId }
     })
         .then(user => {
             if (!user) {
@@ -37,17 +38,17 @@ exports.createArticle = (req, res, next) => {
                 text: text,
                 attachement: image,
                 likes: 0,
-                UserId: userId
+                UserId: user.id
             })
                 .then(article => {
-                    return res.status(201).json({ artId: article.id, message: 'Message créé !' }) // retourne l'id du nouvel utilisateur
+                    return res.status(201).json({ articleId: article.id, message: 'Message créé !' }) // retourne l'id du nouvel article
                 })
                 .catch(error => {
                     return res.status(400).json({ error: 'Pas de création' })
                 });
         })
         .catch(error => {
-            res.status(400).json({ error: 'NOOOOO' });
+            res.status(400).json({ error: 'Impossible !' });
         });
 };
 
@@ -89,7 +90,9 @@ exports.getAllArticle = (req, res, next) => {
     }
 
     models.Article.findAll({
-        order: [(order != null) ? order.split(':') : ['id', 'DESC']],
+        order: [
+            ['createdAt', 'DESC']
+          ]
         /* attributes: (fields !== '*' && fields !== null) ? fields.split(',') : null,
          limit: (!isNaN(limit)) ? limit : null,
          offset: (!isNaN(offset)) ? offset : null,  */
@@ -99,14 +102,19 @@ exports.getAllArticle = (req, res, next) => {
         }]*/
     })
         .then(articles => {
-            if (articles) {
-                res.status(201).json(articles);
+            if (!articles) {
+                return res.status(401).json({ error: 'Aucun article trouvé !' });
+            }
+            console.log(articles)
+            res.status(200).json(articles);
+            /*if (articles) {
+                res.status(200).json(articles);
             } else {
                 res.status(400).json({ error: 'Aucun article trouvé!' });
-            }
+            }*/
         })
         .catch(error => {
-            res.status(400).json({ error });
+            res.status(400).json({ error: 'Impossible ' });
         });
 };
 
@@ -153,7 +161,7 @@ exports.modifyArticle = (req, res, next) => {
 // Suppression d'un article
 exports.deleteArticle = (req, res, next) => {
 
-    models.Article.findOne({
+    models.Article.findAll({
         where: { id: id },
         include: [{
             model: models.User,

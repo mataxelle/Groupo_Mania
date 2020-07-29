@@ -21,6 +21,9 @@
 <script>
 import axios from "axios"
 
+const userToken = JSON.parse(localStorage.getItem('userTkn'));
+//const userId = JSON.parse(localStorage.getItem("userId"));
+
 export default {
     name: "CommentForm",
 
@@ -35,7 +38,11 @@ export default {
     commentSubmit() {
         this.loading = true;
         
-        axios.post("http://localhost:3000/api/articles/", this.content)
+        axios.post("http://localhost:3000/api/articles/", this.content, {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
         .then(response => {
             this.$emit('commented', response.content);
             this.content = ""; // vider

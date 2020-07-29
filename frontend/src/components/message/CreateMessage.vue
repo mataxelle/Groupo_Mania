@@ -61,10 +61,10 @@ export default {
     };
   },
 
-  headers: {
+  /*headers: {
     Authorization:
       'Bearer' + userToken,
-  },
+  },*/
 
   mounted() {
     axios
@@ -98,6 +98,7 @@ export default {
         .post("http://localhost:3000/api/articles", allContent)
         .then(response => {
           localStorage.setItem("allContent", JSON.stringify(response.data.allContent))
+          localStorage.setItem("articleId", JSON.stringify(response.data.id))
           Swal.fire("Article créé !");
           this.$router.replace({
             name: "actualityWall",

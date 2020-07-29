@@ -160,26 +160,32 @@ exports.logout = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
 
-  /*models.User.findOne({
-    where: { isAdmin: 1 }
+
+  var admin = true;
+
+  models.User.findAll({
+    where: { isAdmin: admin }
   })
   .then(admin => {
     if (!admin) { return res.status(400).json({ error: 'Admin inexistant !'})
   }
     models.User.findAll({
+      order: [
+      ['createdAt', 'DESC']
+    ]
     })
       .then(users => res.status(200).json(users))
       .catch(error => res.status(500).json({ error: 'Aucune données !' }))
   })
-  .catch(error => res.status(500).json({ error }))*/
+  .catch(error => res.status(500).json({ error }))
 
-  var id = req.body.id;
-
-  models.User.findAll({
-    where: { id: id }
+  /*models.User.findAll({
+    order: [
+      ['createdAt', 'DESC']
+    ]
   })
     .then(users => res.json(users))
-    .catch(error => res.status(500).json({ error: 'Aucune données !' }))
+    .catch(error => res.status(500).json({ error: 'Aucune données !' }))*/
 }
 
 

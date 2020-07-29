@@ -2,7 +2,11 @@
   <v-container>
     <BarUpInside />
 
-    <v-card v-for="member in members" :key="member.id" class="eachCard">
+    <div class="members" v-if="members.length <= 0">Aucun utilisateur disponible !</div>
+
+    <div v-if="members.length > 0"> Utilisateurs disponibles par ordre décroisssant :
+
+      <v-card v-for="member in members" :key="member.id" class="eachCard">
       <v-card color="#F3D664">
           <v-card-title> <v-icon>mdi-card-account-details</v-icon> Utilisateur :</v-card-title>
           <v-divider></v-divider>
@@ -27,6 +31,7 @@
            <v-icon>mdi-delete</v-icon> Supprimer utilisateur</v-btn>
       </v-layout>
     </v-card>
+    </div>
   </v-container>
 </template>
 
@@ -60,7 +65,8 @@ export default {
   },
 
   methods: {
-      deleteUser() {}
+      deleteUser() {
+      }
   }
 };
 </script>

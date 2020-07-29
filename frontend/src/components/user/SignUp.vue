@@ -83,11 +83,11 @@ export default {
         .post("http://localhost:3000/api/auth/signup", formdata)
         .then(response => {
           console.log(response);
-          localStorage.setItem("userTkn", response.data.token);
+          //localStorage.setItem("userTkn", response.data.token);
           localStorage.setItem("userId", response.data.userId);
-          Swal.fire("Bienvenue,", "bonne navigation !");
+          Swal.fire("Bienvenue,", "Connectez-vous !");
           this.$router.replace({
-            name: "profil",
+            name: "connexion",
             params: { message: response.data.success }
           });
         })

@@ -69,6 +69,11 @@ import Comment from "../comment/Comment";
 import axios from "axios";
 //import Swal from "sweetalert2";
 
+const userToken = JSON.parse(localStorage.getItem('userTkn'));
+//const userId = JSON.parse(localStorage.getItem("userId"));
+
+//const articleId = JSON.parse(localStorage.getItem('articleId'));
+
 export default {
   name: "Message",
   components: {
@@ -90,7 +95,11 @@ export default {
   created () {
     this.loading = true;
 
-    axios.get("http://localhost:3000/api/articles/")
+    axios.get("http://localhost:3000/api/articles", {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
       .then(response => {
         this.comments = response.data;
         this.loading = false;
