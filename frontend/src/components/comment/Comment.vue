@@ -14,6 +14,8 @@ import axios from "axios";
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
 //const userId = JSON.parse(localStorage.getItem("userId"));
 
+const articleId = JSON.parse(localStorage.getItem('articleId'));
+
 export default {
     
     data () {
@@ -25,7 +27,7 @@ export default {
 
      mounted() {
     axios
-      .get("http://localhost:3000/api/articles/:id/comment", {
+      .get("http://localhost:3000/api/articles/" + articleId + "/comment", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         }

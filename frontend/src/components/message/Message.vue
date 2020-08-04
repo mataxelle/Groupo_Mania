@@ -52,7 +52,7 @@
     <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
 
     <!--  v-for="comment in comments" :key="comment" :comment="message" -->
-    <Comment v-for="comment in comments" :key="comment" :comment="message" />
+    <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
 
     <!-- v-on:commented="updateComment" -->
     <CommentForm />

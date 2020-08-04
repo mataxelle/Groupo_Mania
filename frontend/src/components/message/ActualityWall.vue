@@ -121,21 +121,11 @@ export default {
 
   methods: {
     readComment() {
-      axios
-        .post("http://localhost:3000/api/article/" + articleId, {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      })
-      .then(response => {
+      
           this.$router.replace({
             name: "message",
-            params: { message: response.data.success }
+            params: { articleId }
           });
-        })
-      .catch(error => {
-          console.log(error);
-        })
     }
   }
 };

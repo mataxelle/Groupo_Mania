@@ -10,11 +10,11 @@ exports.createArticle = (req, res, next) => {
     var text = req.body.text;
     var image = req.body.imgUrl;
 
-    var userId = req.params; // USER INCON
-    //const id = req.params.id; UNDEFINED
+    const id = req.params; // USER INCON
+    //const id = req.params.id; //BAD REQUEST undif
+    //const id = req.params.userId; // bad request
 
-    console.log(req.body)
-    console.log(req.params.id)
+    console.log(req.params)
     
     if (title == null || text == null) {
         return res.status(400).json({ error: 'Contenu vide !' })
@@ -25,9 +25,9 @@ exports.createArticle = (req, res, next) => {
     };
 
     models.User.findOne({
-        attributes: ['id', 'firstName', 'lastName', 'email'],
-        where: { id: userId }
-    })
+        attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
+        where: { id: id }
+      })
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'Utilisateur inconnu !' });
@@ -50,6 +50,7 @@ exports.createArticle = (req, res, next) => {
         .catch(error => {
             res.status(400).json({ error: 'Impossible !' });
         });
+
 };
 
 
