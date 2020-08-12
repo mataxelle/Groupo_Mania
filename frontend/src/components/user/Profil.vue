@@ -71,7 +71,7 @@ import axios from "axios";
 import Swal from "sweetalert2"
 
 const userToken = JSON.parse(localStorage.getItem("userTkn"));
-const userId = JSON.parse(localStorage.getItem("userId"));
+//const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
   name: "Profil",
@@ -88,7 +88,7 @@ export default {
 
   mounted() {
     axios
-      .get("http://localhost:3000/api/users/profil/" + userId, {
+      .get("http://localhost:3000/api/users/profil", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
@@ -106,7 +106,7 @@ export default {
   methods: {
     deleteProfil() {
       axios
-        .delete("http://localhost:3000/api/users/profil/" + userId, {
+        .delete("http://localhost:3000/api/users/profil/", {
           headers: {
             Authorization: `Bearer ${userToken}`
           },

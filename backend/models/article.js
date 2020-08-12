@@ -2,7 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
   const Article = sequelize.define('Article', {
-    userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     text: DataTypes.STRING,  // ou TEXT? car longueur
     attachement: DataTypes.STRING,

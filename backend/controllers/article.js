@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const models = require('../models');
 
 const ITEMS_LIMIT = 100;
@@ -6,15 +7,12 @@ const ITEMS_LIMIT = 100;
 // Création d'un article
 exports.createArticle = (req, res, next) => {
 
+    var headerAuth  = req.headers['authorization'];
+    var userId      = auth.getUserId(headerAuth);
+
     var title = req.body.title;
     var text = req.body.text;
-    var image = req.body.imgUrl;
 
-    const id = req.params; // USER INCON
-    //const id = req.params.id; //BAD REQUEST undif
-    //const id = req.params.userId; // bad request
-
-    console.log(req.params)
     
     if (title == null || text == null) {
         return res.status(400).json({ error: 'Contenu vide !' })
@@ -25,21 +23,19 @@ exports.createArticle = (req, res, next) => {
     };
 
     models.User.findOne({
-        attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
-        where: { id: id }
+        where: { id: userId }
       })
-        .then(user => {
-            if (!user) {
+        .then(userFound => {
+            if (!userFound) {
                 return res.status(401).json({ error: 'Utilisateur inconnu !' });
             }
 
             models.Article.create({
                 title: title,
                 text: text,
-                attachement: image,
                 likes: 0,
-                UserId: user.id
-            })
+                UserId: userFound.id
+            }) 
                 .then(article => {
                     return res.status(201).json({ articleId: article.id, message: 'Message créé !' }) // retourne l'id du nouvel article
                 })
@@ -57,7 +53,6 @@ exports.createArticle = (req, res, next) => {
 // Récupération d'un article
 exports.getOneArticle = (req, res, next) => {
 
-    var id = req.params.id;
 
     models.Article.findOne({
         where: { id: id },
@@ -140,7 +135,7 @@ exports.modifyArticle = (req, res, next) => {
                 if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
             }
 
-            models.Message.update({
+            models.Article.update({
                 title: title,
                 text: text,
                 updatedAt: new Date()

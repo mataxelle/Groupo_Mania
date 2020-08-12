@@ -1,6 +1,7 @@
+/*
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const auth = require('../middleware/auth');
 const models = require('../models'); // Va chercher tous les models définies avec siquelize
 const asyncL = require('async');
 
@@ -49,9 +50,9 @@ exports.signup = (req, res) => {
     return res.status(400).json({ error: ' Adresse email non valide!' });
   }
 
-  /*if (!PASSWORD_REGEX.test.password) {
-    return res.status(400).json({ error: 'Mot de passe invalide. Doit contenir entre 7 et 12 caractères, dont au moins un chiffre !' });
-  }*/
+  //if (!PASSWORD_REGEX.test.password) {
+    //return res.status(400).json({ error: 'Mot de passe invalide. Doit contenir entre 7 et 12 caractères, dont au moins un chiffre !' });
+  //}
 
   models.User.findOne({
     attributes: ['email'],  // Savoir si un utilisateur existe déja grâce à son email
@@ -101,9 +102,9 @@ exports.login = (req, res, next) => {
     return res.status(400).json({ error: ' Adresse email non valide!' });
   };
 
-  /*if (!PASSWORD_REGEX.test.password) {
-    return res.status(400).json({ error: 'Mot de passe invalide. Doit contenir entre 7 et 12 caractères, dont au moins un chiffre !' });
-  }*/
+  //if (!PASSWORD_REGEX.test.password) {
+    //return res.status(400).json({ error: 'Mot de passe invalide. Doit contenir entre 7 et 12 caractères, dont au moins un chiffre !' });
+  //}
 
   models.User.findOne({
     where: { email: email }
@@ -140,12 +141,11 @@ exports.login = (req, res, next) => {
 
 exports.logout = (req, res, next) => {
 
-  var headerAuth  = req.headers['authorization'];
-  var userId      = auth.getUserId(headerAuth);
+  const id = req.params.id;
 
   models.User.findOne({
     attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
-    where: { id: userId }
+    where: { id: id }
   })
     .then(user => {
       if (!user) return res.status(400).json({ error: "Utilisateur inexistant !" });
@@ -179,14 +179,6 @@ exports.getAllUsers = (req, res, next) => {
       .catch(error => res.status(500).json({ error: 'Aucune données !' }))
   })
   .catch(error => res.status(500).json({ error }))
-
-  /*models.User.findAll({
-    order: [
-      ['createdAt', 'DESC']
-    ]
-  })
-    .then(users => res.json(users))
-    .catch(error => res.status(500).json({ error: 'Aucune données !' }))*/
 }
 
 
@@ -194,15 +186,11 @@ exports.getAllUsers = (req, res, next) => {
 
 exports.getUserProfil = (req, res, next) => {
 
-  var headerAuth  = req.headers['authorization'];
-  var userId      = auth.getUserId(headerAuth);
-
-  if (userId < 0)
-  return res.status(400).json({ 'error': 'wrong token' });
+  const id = req.params.id;
 
   models.User.findOne({
     attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
-    where: { id: userId }
+    where: { id: id }
   })
     .then(user => {
       if (user) {
@@ -220,9 +208,7 @@ exports.getUserProfil = (req, res, next) => {
 
 exports.updateUserProfil = (req, res, next) => {
 
-  var headerAuth  = req.headers['authorization'];
-  var userId      = auth.getUserId(headerAuth);
-
+  const id = req.params.id;
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
   var email = req.body.email;
@@ -255,8 +241,7 @@ exports.updateUserProfil = (req, res, next) => {
   }
 
   models.User.findOne({
-    attributes: ['id', 'firstName', 'lastName', 'email'],
-    where: { id: userId }
+    where: { id: id }
   })
     .then(user => {
       if (!user) {
@@ -287,12 +272,11 @@ exports.updateUserProfil = (req, res, next) => {
 
 exports.deleteUserProfil = (req, res, next) => {
 
-  var headerAuth  = req.headers['authorization'];
-  var userId      = auth.getUserId(headerAuth);
+  const id = req.params.id;
 
   models.User.findOne({
     attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],
-    where: { id: userId }
+    where: { id: id }
   })
     .then(user => {
       if (!user) {
@@ -310,3 +294,5 @@ exports.deleteUserProfil = (req, res, next) => {
     })
     .catch((error) => res.status(404).json({ error: error }))
 };
+
+*/

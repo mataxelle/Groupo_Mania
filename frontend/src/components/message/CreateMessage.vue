@@ -95,7 +95,11 @@ export default {
       };
 
       axios
-        .post("http://localhost:3000/api/articles", allContent)
+        .post("http://localhost:3000/api/articles", allContent, {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
         .then(response => {
           localStorage.setItem("allContent", JSON.stringify(response.data.allContent))
           localStorage.setItem("articleId", JSON.stringify(response.data.id))
