@@ -32,18 +32,18 @@ exports.router = (function () {
 
     apiRoutes.get('/articles/:id', articleCtrl.getOneArticle);
 
-    /*apiRoutes.put('/articles/:id', multer, articleCtrl.modifyArticle);
+    apiRoutes.put('/articles/:id', multer, articleCtrl.modifyArticle);
 
     apiRoutes.delete('/articles/:id', articleCtrl.deleteArticle);
 
     // comment et like
-    apiRoutes.post('/articles/:id/comment', auth, commentCtrl.createComment);
+    apiRoutes.post('/articles/:id/comment', commentCtrl.createComment);
 
-    apiRoutes.get('/articles/:id/comment', auth, commentCtrl.getComment);
+    apiRoutes.get('/articles/:id/comment', commentCtrl.getComment);
 
-    apiRoutes.delete('/articles/:id/comment', auth, commentCtrl.deleteComment);
+    apiRoutes.delete('/articles/:id/comment', commentCtrl.deleteComment);
 
-    apiRoutes.post('/articles/:id/like', auth, articleCtrl.likeOrDislike);*/
+    apiRoutes.post('/articles/:id/like', articleCtrl.likeOrDislike);
 
     return apiRoutes;
 })(); //pour instancier le routeur

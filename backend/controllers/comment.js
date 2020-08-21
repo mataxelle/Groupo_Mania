@@ -4,10 +4,11 @@ const models = require('../models');
 
 exports.createComment = (req, res, next) => {
 
-    var commentaire = req.body.commentaire;
-    console.log(req.body)
+    var headerAuth  = req.headers['authorization'];
+    var userId      = auth.getUserId(headerAuth);
 
-    var userId = req.params.id;
+    var commentaire = req.body.commentaire;
+    console.log(req.body);
 
     var articleId = req.params.articleId;
 
@@ -21,7 +22,7 @@ exports.createComment = (req, res, next) => {
 
     models.User.findOne({
         attributes: ['id', 'firstName', 'lastName', 'email'],
-        where: { id: id }
+        where: { id: userId }
     })
         .then(user => {
             if (!user) {
@@ -41,12 +42,12 @@ exports.createComment = (req, res, next) => {
                 });
         })
         .catch(error => {
-            res.status(400).json({ error: 'NOOOOO' });
+            res.status(400).json({ error: 'Impossible !' });
         });
 };
 
 
-// Afhicher commentaire
+// Afficher commentaire
 exports.getComment = (req, res, next) => {
 
     models.Comment.findAll({
@@ -75,11 +76,13 @@ exports.getComment = (req, res, next) => {
 // Suppression comment
 exports.deleteComment = (req, res, next) => {
 
+    var headerAuth  = req.headers['authorization'];
+    var userId      = auth.getUserId(headerAuth);
+
     models.Comment.findOne({
         where: { id: id },
         include: [{
             model: models.Article,
-            attributes: []
         }, {
             model: models.User,
             attributes: ['firstName', 'lastName']
@@ -95,7 +98,10 @@ exports.deleteComment = (req, res, next) => {
             }
 
             models.Comment.destroy({
-                attributes: ['id', 'commantaire']
+                attributes: ['id', 'commantaire'],
+                where: {
+                    id: userId
+                }
             })
                 .then(resultat => {
                     res.status(200).json({ success: 'Commentaire supprimé !' })

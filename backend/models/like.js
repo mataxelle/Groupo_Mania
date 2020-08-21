@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     models.Like.belongsTo(models.Article, {
-      foreignKey: 'messageId',
+      foreignKey: 'articleId',
       as: 'article',
     });
   };

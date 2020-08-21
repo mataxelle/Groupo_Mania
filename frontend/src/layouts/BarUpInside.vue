@@ -22,7 +22,7 @@
             <v-icon>mdi-account-circle</v-icon>
           </router-link>
         </v-btn>
-        <v-btn text rounded class="my-2 color" @click.prevent="signout">
+        <v-btn text rounded class="my-2 color" @click.prevent="logOut">
           <v-icon>mdi-arrow-right-circle</v-icon>
         </v-btn>
       </v-row>
@@ -45,7 +45,7 @@
           <v-icon>mdi-account-circle</v-icon>
           </router-link>
         </v-btn>
-        <v-btn text rounded class="my-2 color" @click.prevent="signout">
+        <v-btn text rounded class="my-2 color" @click.prevent="logOut">
           <v-icon>mdi-arrow-right-circle</v-icon>
         </v-btn>
       </v-row>
@@ -58,7 +58,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
-//const userId = JSON.parse(localStorage.getItem("userId"));
+const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
   name: 'BarUpInside',
@@ -70,9 +70,11 @@ export default {
   },
 
   methods: {
-    signout() {
+    logOut(e) {
+      e.preventDefault();
+
       axios
-        .post("http://localhost:3000/api/auth/logout", {
+        .post("http://localhost:3000/api/auth/logout", userId, {
         headers: {
           Authorization: `Bearer ${userToken}`
         }

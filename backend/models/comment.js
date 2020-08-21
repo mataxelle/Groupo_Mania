@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     models.Comment.belongsTo(models.Article, {
-      foreignKey: 'messageId',
+      foreignKey: 'articleId',
       as: 'article',
     });
   };

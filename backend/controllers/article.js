@@ -13,9 +13,15 @@ exports.createArticle = (req, res, next) => {
     var title = req.body.title;
     var text = req.body.text;
 
+    console.log(req.body)
+
     
-    if (title == null || text == null) {
-        return res.status(400).json({ error: 'Contenu vide !' })
+    if (title == null) {
+        return res.status(400).json({ error: 'Titre manquant !' })
+    };
+
+    if (text == null) {
+        return res.status(400).json({ error: 'Contenu manquant !' })
     };
 
     if (title.length <= 2 || text.length <= 2) {
@@ -30,17 +36,18 @@ exports.createArticle = (req, res, next) => {
                 return res.status(401).json({ error: 'Utilisateur inconnu !' });
             }
 
-            models.Article.create({
+            const art = models.Article.create({
                 title: title,
                 text: text,
                 likes: 0,
-                UserId: userFound.id
-            }) 
-                .then(article => {
-                    return res.status(201).json({ articleId: article.id, message: 'Message créé !' }) // retourne l'id du nouvel article
+                attachement: null,
+                userId: userFound.id
+            })
+                .then(createArticle => {
+                    return res.status(201).json({ articleId: createArticle.id, message: 'Message créé !' }) // retourne l'id du nouvel article
                 })
                 .catch(error => {
-                    return res.status(400).json({ error: 'Pas de création' })
+                    return res.status(400).json({ error: error })
                 });
         })
         .catch(error => {
@@ -53,6 +60,9 @@ exports.createArticle = (req, res, next) => {
 // Récupération d'un article
 exports.getOneArticle = (req, res, next) => {
 
+    const id = req.params.id;
+    console.log(id)
+
 
     models.Article.findOne({
         where: { id: id },
@@ -62,7 +72,7 @@ exports.getOneArticle = (req, res, next) => {
         }]
     })
         .then(article => {
-            if (article == null) {
+            if (!article) {
                 return res.status(400).json({ error: "Article non disponible !"})
             }
             res.status(200).json(article)
@@ -118,6 +128,13 @@ exports.getAllArticle = (req, res, next) => {
 // Modification d'un article
 exports.modifyArticle = (req, res, next) => {
 
+    var headerAuth  = req.headers['authorization'];
+    var userId      = auth.getUserId(headerAuth);
+
+    const id = req.params.id;
+
+    var title = req.body.title;
+    var text = req.body.text;
 
     models.Article.findOne({
         where: { id: id },
@@ -141,7 +158,7 @@ exports.modifyArticle = (req, res, next) => {
                 updatedAt: new Date()
             }, {
                 where: {
-                    id: user.id
+                    id: userId
                 }
             })
                 .then(resultat => {
@@ -157,7 +174,12 @@ exports.modifyArticle = (req, res, next) => {
 // Suppression d'un article
 exports.deleteArticle = (req, res, next) => {
 
-    models.Article.findAll({
+    var headerAuth  = req.headers['authorization'];
+    var userId      = auth.getUserId(headerAuth);
+
+    const id = req.params.id;
+
+    models.Article.findOne({
         where: { id: id },
         include: [{
             model: models.User,
@@ -174,7 +196,10 @@ exports.deleteArticle = (req, res, next) => {
             }
 
             models.Message.destroy({
-                attributes: ['id', 'titre', 'text']
+                attributes: ['id', 'titre', 'text'],
+                where: {
+                        id: userId
+                }
             })
                 .then(resultat => {
                     res.status(200).json({ success: 'Article supprimé !' })

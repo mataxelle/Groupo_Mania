@@ -5,8 +5,8 @@
     <v-card>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Titre : {{ article.titre }}</v-list-item-title>
-          <v-list-item-subtitle>De : {{ user.frstName }}</v-list-item-subtitle>
+          <v-list-item-title>Titre : {{ article.title }}</v-list-item-title>
+          <v-list-item-subtitle>De : {{ article.userId }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 
@@ -92,19 +92,25 @@ export default {
     };
   },
 
-  created () {
+  mounted () {
     this.loading = true;
 
-    axios.get("http://localhost:3000/api/articles", {
+    axios.get("http://localhost:3000/api/articles/" + this.$route.params.articleId, {
         headers: {
           Authorization: `Bearer ${userToken}`
         }
       })
       .then(response => {
+        this.article = response.data;
         this.comments = response.data;
         this.loading = false;
+
+        console.log(this.article);
+        console.log(response.data);
       })
-      .catch()
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
   methods: {

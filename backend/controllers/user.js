@@ -140,6 +140,7 @@ exports.login = (req, res, next) => {
 
 exports.logout = (req, res, next) => {
 
+  
   var headerAuth  = req.headers['authorization'];
   var userId      = auth.getUserId(headerAuth);
 

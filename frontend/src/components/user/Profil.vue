@@ -86,7 +86,7 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     axios
       .get("http://localhost:3000/api/users/profil", {
         headers: {
@@ -106,7 +106,7 @@ export default {
   methods: {
     deleteProfil() {
       axios
-        .delete("http://localhost:3000/api/users/profil/", {
+        .delete("http://localhost:3000/api/users/profil", {
           headers: {
             Authorization: `Bearer ${userToken}`
           },

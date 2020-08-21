@@ -14,27 +14,35 @@
           </v-card>
 
           <v-card class="d-flex my-2">
-              <v-row class="align-center mx-3">
-                <v-col>Une envie de poster un message ?</v-col>
-                <v-col>
-                  <v-btn rounded color="purple lighten-2">
-                    <router-link to="/createMessage" class="color">C'est par ici</router-link>
-                  </v-btn>
-                </v-col>
-              </v-row>
+            <v-row class="align-center mx-3">
+              <v-col>Une envie de poster un message ?</v-col>
+              <v-col>
+                <v-btn rounded color="purple lighten-2">
+                  <router-link to="/createMessage" class="color">C'est par ici</router-link>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-card>
         </div>
 
-        <div class="ifMessage" v-if="messages.length <= 0">Aucune publication disponible !</div>
+        <div class="ifMessage" v-if="articles.length <= 0">Aucune publication disponible !</div>
 
-        <div v-if="messages.length > 0">
-          <div class="ifMessage">Les publications disponibles !</div>
+        <div v-if="articles.length > 0">
+          <div class="ifArticle">Les publications disponibles !</div>
 
-          <v-card v-for="message in messages" :key="message.id">  <!-- /v-for="message in messages" :key="message.id" -->
+          <v-card v-for="article in articles" :key="article.id" :article="article">
             <v-list-item>
               <v-list-item-content>
-                <v-list-item-title>Titre: <span class="size">{{ message.title }}</span></v-list-item-title>
-                <v-list-item-subtitle><v-icon small>mdi-account-circle</v-icon></v-list-item-subtitle>
+                <v-list-item-title>
+                  Titre :
+                  <router-link :to="{ name: 'message', params: {articleId: article.id }}">
+                    <span class="size">{{ article.title }}</span>
+                  </router-link>
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-icon small>mdi-account-circle</v-icon>
+                  {{ article.userId }}
+                </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
 
@@ -42,38 +50,45 @@
 
             <v-img src alt></v-img>
 
-            <v-card-text> <span class="size-message">{{ message.text }}</span></v-card-text>
+            <v-card-text>
+              <span class="size-message">{{ article.text }}</span>
+            </v-card-text>
 
-            <v-card-text class="x-small">Fait le: {{ message.createdAt }}</v-card-text>
+            <v-card-text class="x-small">Fait le : {{ article.createdAt }}</v-card-text>
 
             <v-divider></v-divider>
 
             <v-row class="align-center mx-3">
               <v-col>
-                <v-btn class="align-center mx-3" small text color="blue" @click="readComment">Voir les commentaires</v-btn>
+                <v-btn
+                  class="align-center mx-3"
+                  small
+                  text
+                  color="blue"
+                  @click="readComment"
+                >Voir les commentaires</v-btn>
               </v-col>
               <v-col>
                 <v-row justify="end" class="margin">
-                <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="blue">
-                      <v-icon>mdi-thumb-up</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>J'aime</span>
-                </v-tooltip>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="red">
-                      <v-icon>mdi-thumb-down</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>J'aime pas</span>
-                </v-tooltip>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="blue">
+                        <v-icon>mdi-thumb-up</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>J'aime</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="red">
+                        <v-icon>mdi-thumb-down</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>J'aime pas</span>
+                  </v-tooltip>
                 </v-row>
               </v-col>
             </v-row>
-
           </v-card>
         </div>
       </v-main>
@@ -86,21 +101,21 @@ import BarUpInside from "@/layouts/BarUpInside";
 //import Footer from "@/layouts/Footer";
 import axios from "axios";
 
-const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userToken = JSON.parse(localStorage.getItem("userTkn"));
 //const userId = JSON.parse(localStorage.getItem("userId"));
 const articleId = JSON.parse(localStorage.getItem("articleId"));
 
 export default {
   name: "ActualityWall",
   components: {
-    BarUpInside
+    BarUpInside,
     //Footer
   },
 
   data: () => {
     return {
       user: {},
-      messages: {}
+      articles: {},
     };
   },
 
@@ -108,26 +123,38 @@ export default {
     axios
       .get("http://localhost:3000/api/articles", {
         headers: {
-          Authorization: `Bearer ${userToken}`
-        }
+          Authorization: `Bearer ${userToken}`,
+        },
       })
-      .then(response => {
-        this.messages = response.data;
+      .then((response) => {
+        this.articles = response.data;
       })
-      .catch(error => {
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get("http://localhost:3000/api/users/profil", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        this.user = response.data;
+      })
+      .catch((error) => {
         console.log(error);
       });
   },
 
   methods: {
     readComment() {
-      
-          this.$router.replace({
-            name: "message",
-            params: { articleId }
-          });
-    }
-  }
+      this.$router.push({
+        name: "message",
+        params: { articleId },
+      });
+    },
+  },
 };
 </script>
 
@@ -137,7 +164,12 @@ h1 {
   color: rgb(240, 196, 0);
 }
 
-.v-list-item__title, .v-card__text {
+.v-card {
+  margin: 20px;
+}
+
+.v-list-item__title,
+.v-card__text {
   color: rgb(2, 0, 0) !important;
 }
 

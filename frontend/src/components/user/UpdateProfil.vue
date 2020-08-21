@@ -27,7 +27,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
-const userId = JSON.parse(localStorage.getItem("userId"));
+//const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
   name: "UpdateProfil",
@@ -67,7 +67,7 @@ export default {
       };
 
       axios
-        .put("http://localhost:3000/api/users/profil/" + userId, formdata, { headers: {
+        .put("http://localhost:3000/api/users/profil", formdata, { headers: {
           Authorization: `Bearer ${userToken}`
         }
           })
