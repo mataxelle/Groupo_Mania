@@ -1,8 +1,15 @@
 <template>
     <v-container>
-        <v-card>
+        <v-card v-for="comment in comments" :key="comment.id" :comment="comment">
             <v-img></v-img>
-            <v-card-text>{{ user.firstName }} <span class="date">{{ comment.createdAt }}</span></v-card-text>
+            <v-row>
+              <v-col>
+              <v-card-text>De : {{ comment.userId }} </v-card-text>
+            </v-col>
+            <v-col>
+              <v-card-text>à : {{ comment.createdAt }}</v-card-text>
+            </v-col>
+            </v-row>
             <v-card-text>{{ comment.commentaire }}</v-card-text>
         </v-card>
     </v-container>
@@ -12,29 +19,26 @@
 import axios from "axios";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
-//const userId = JSON.parse(localStorage.getItem("userId"));
-
-const articleId = JSON.parse(localStorage.getItem('articleId'));
 
 export default {
     
     data () {
         return {
-            comment: {},
+            comments: {},
             user: {}
         }
     },
 
      mounted() {
     axios
-      .get("http://localhost:3000/api/articles/" + articleId + "/comment", {
+      .get("http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         }
       })
       .then((response) => {
         this.user = response.data;
-        this.comment = response.data;
+        this.comments = response.data;
         console.log(response.data);
       })
       .catch((error) => {

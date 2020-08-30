@@ -7,7 +7,7 @@
         </div>
 
         <v-form @submit.prevent="commentSubmit" class="form">
-          <v-textarea v-model="data.content" class="input-message" name="message" id="message" rows="3" placeholder="Votre commentaire..." required></v-textarea>
+          <v-textarea v-model="text" type="text" placeholder="Votre commentaire..." required></v-textarea>
           <v-card-text>De :</v-card-text>
           <div class="commentSubBtn">
             <v-btn :disabled="loading" type="submit" small value="Comment" color="blue">Poster un commentaire</v-btn>
@@ -19,7 +19,8 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
 //const userId = JSON.parse(localStorage.getItem("userId"));
@@ -29,24 +30,31 @@ export default {
 
     data () {
         return {
+            text: "",
             loading: false,
-            data: {},
         }
     },
 
     methods: {
-    commentSubmit() {
+    commentSubmit(e) {
+      e.preventDefault();
+
         this.loading = true;
+
+        if (this.text == null) {
+        return false;
+      }
         
-        axios.post("http://localhost:3000/api/articles/", this.content, {
+        axios.post("http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment", this.text, {
         headers: {
           Authorization: `Bearer ${userToken}`
         }
       })
         .then(response => {
-            this.$emit('commented', response.content);
-            this.content = ""; // vider
+            this.$emit('commented', response.data);
+            this.text = ""; // vider
             this.loading = false;
+            Swal.fire("Commentaire ajouté !");
         })
         .catch(error => {
           console.log(error);

@@ -5,20 +5,52 @@
     <v-card>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Titre : {{ article.title }}</v-list-item-title>
-          <v-list-item-subtitle>De : {{ article.userId }}</v-list-item-subtitle>
+          <v-row>
+            <v-col>
+              <v-list-item-title>Titre : {{ article.title }}</v-list-item-title>
+              <v-list-item-subtitle>De : {{ article.userId }}</v-list-item-subtitle>
+            </v-col>
+            <v-col>
+              <v-row justify="end" class="margin">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }" >
+                    <v-btn v-bind="attrs" v-on="on" text color="green" small>
+                      <router-link :to="{ name: 'updateMessage', params: { articleId: article.id }}" class="color">
+                        <v-icon>mdi-lead-pencil</v-icon>
+                      </router-link>
+                    </v-btn>
+                  </template>
+                  <span>Modifier</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn v-bind="attrs" v-on="on" text color="red" small @click="deleteArticle">
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Supprimer</span>
+                </v-tooltip>
+              </v-row>
+            </v-col>
+          </v-row>
         </v-list-item-content>
       </v-list-item>
 
       <v-img></v-img>
 
-      <v-card-text></v-card-text>
+      <v-card-text>{{ article.text }}</v-card-text>
 
-      <v-card-text>Fait le : {{ article.createdAt }} </v-card-text>
+      <v-card-text>Publié le : {{ article.createdAt }}</v-card-text>
 
       <v-row class="align-center mx-3">
         <v-col>
-          <v-btn class="align-center mx-3" small text color="blue">Poster un commentaire</v-btn>
+          <v-btn
+            href="#comment"
+            class="align-center mx-3"
+            small
+            text
+            color="blue"
+          >Poster un commentaire</v-btn>
         </v-col>
         <v-col>
           <v-row justify="end" class="margin">
@@ -51,11 +83,9 @@
 
     <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
 
-    <!--  v-for="comment in comments" :key="comment" :comment="message" -->
     <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
 
-    <!-- v-on:commented="updateComment" -->
-    <CommentForm />
+    <CommentForm v-on:commented="updateComment" />
 
     <Footer />
   </v-container>
@@ -67,9 +97,9 @@ import Footer from "@/layouts/Footer";
 import CommentForm from "../comment/CommentForm";
 import Comment from "../comment/Comment";
 import axios from "axios";
-//import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 
-const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userToken = JSON.parse(localStorage.getItem("userTkn"));
 //const userId = JSON.parse(localStorage.getItem("userId"));
 
 //const articleId = JSON.parse(localStorage.getItem('articleId'));
@@ -80,7 +110,7 @@ export default {
     BarUpInside,
     Footer,
     Comment,
-    CommentForm
+    CommentForm,
   },
 
   data() {
@@ -88,19 +118,23 @@ export default {
       user: {},
       article: {},
       loading: false,
-      comments: {}
+      comments: {},
     };
   },
 
-  mounted () {
+  mounted() {
     this.loading = true;
 
-    axios.get("http://localhost:3000/api/articles/" + this.$route.params.articleId, {
-        headers: {
-          Authorization: `Bearer ${userToken}`
+    axios
+      .get(
+        "http://localhost:3000/api/articles/" + this.$route.params.articleId,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
         }
-      })
-      .then(response => {
+      )
+      .then((response) => {
         this.article = response.data;
         this.comments = response.data;
         this.loading = false;
@@ -111,13 +145,53 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+
+    axios
+      .get(
+        "http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment",
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        this.comments = response.data;
+        this.loading = false;
+
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
   methods: {
-    updateComment (comment) {
+    updateComment(comment) {
       this.comments.push(comment);
+    },
+
+    deleteArticle() {
+      axios.delete("http://localhost:3000/api/aticles/" + this.$route.params.articleId, {
+          headers: {
+            Authorization: `Bearer ${userToken}`
+          },
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            Swal.fire("Article supprimé !")
+          }
+          this.$router.replace({
+              name: "actualityWall",
+              params: { message: "Article supprimé avec succès ! " },
+            });
+          localStorage.clear();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-  }
+  },
 };
 </script>
 

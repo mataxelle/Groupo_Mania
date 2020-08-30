@@ -35,7 +35,7 @@
               <v-list-item-content>
                 <v-list-item-title>
                   Titre :
-                  <router-link :to="{ name: 'message', params: {articleId: article.id }}">
+                  <router-link :to="{ name: 'message', params: { articleId: article.id }}">
                     <span class="size">{{ article.title }}</span>
                   </router-link>
                 </v-list-item-title>
@@ -54,19 +54,19 @@
               <span class="size-message">{{ article.text }}</span>
             </v-card-text>
 
-            <v-card-text class="x-small">Fait le : {{ article.createdAt }}</v-card-text>
+            <v-card-text class="x-small">Publié le : {{ article.createdAt }}</v-card-text>
 
             <v-divider></v-divider>
 
             <v-row class="align-center mx-3">
               <v-col>
-                <v-btn
+                <router-link
                   class="align-center mx-3"
                   small
                   text
                   color="blue"
-                  @click="readComment"
-                >Voir les commentaires</v-btn>
+                  :to="{ name: 'message', params: { articleId: article.id }}"
+                >Voir les commentaires</router-link>
               </v-col>
               <v-col>
                 <v-row justify="end" class="margin">
@@ -103,7 +103,7 @@ import axios from "axios";
 
 const userToken = JSON.parse(localStorage.getItem("userTkn"));
 //const userId = JSON.parse(localStorage.getItem("userId"));
-const articleId = JSON.parse(localStorage.getItem("articleId"));
+//const articleId = JSON.parse(localStorage.getItem("articleId"));
 
 export default {
   name: "ActualityWall",
@@ -147,14 +147,14 @@ export default {
       });
   },
 
-  methods: {
+  /*methods: {
     readComment() {
       this.$router.push({
         name: "message",
-        params: { articleId },
+        params: { articleId: article.id},
       });
     },
-  },
+  },*/
 };
 </script>
 
@@ -190,7 +190,7 @@ h1 {
   font-size: xx-small;
 }
 
-.ifMessage {
+.ifArticle {
   text-align: center;
   margin: 20px 0px;
 }

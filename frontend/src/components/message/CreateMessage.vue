@@ -43,7 +43,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem('userTkn'));
-//const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
   name: "CreateMessage",
@@ -60,11 +59,6 @@ export default {
       isValid: true,
     };
   },
-
-  /*headers: {
-    Authorization:
-      'Bearer' + userToken,
-  },*/
 
   mounted() {
     axios

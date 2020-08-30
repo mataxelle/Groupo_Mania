@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const models = require('../models');
 
 
@@ -10,7 +11,7 @@ exports.createComment = (req, res, next) => {
     var commentaire = req.body.commentaire;
     console.log(req.body);
 
-    var articleId = req.params.articleId;
+    var articleId = req.params.id;
 
     if (commentaire == null) {
         return res.status(400).json({ error: 'Contenu vide !' })
@@ -30,12 +31,12 @@ exports.createComment = (req, res, next) => {
             }
 
             models.Comment.create({
-                commentaire: commantaire,
-                ArticleId: articleId,
-                UserId: userId
+                commentaire: commentaire,
+                articleId: articleId,
+                userId: userId
             })
                 .then(commentaire => {
-                    return res.status(201).json({ commantaireId: commentaire.id, message: 'Commentaire créé !' }) // retourne l'id du nouveau commentaire
+                    return res.status(201).json({ commentaireId: commentaire.id, message: 'Commentaire créé !' }) // retourne l'id du nouveau commentaire
                 })
                 .catch(error => {
                     return res.status(400).json({ error: 'Pas de création' })
@@ -50,26 +51,44 @@ exports.createComment = (req, res, next) => {
 // Afficher commentaire
 exports.getComment = (req, res, next) => {
 
-    models.Comment.findAll({
-        order: [
-            ['createdAt', 'DESC']
-        ]
+    var articleId = req.params.id;
+
+    models.Article.findOne({
+        where: { id: articleId },
+        include: [{
+            model: models.User,
+            attributes: ['firstName', 'lastName']
+        }]
     })
-        .then(comments => {
-            if (!comments) {
-                return res.status(401).json({ error: 'Aucun commentaire trouvé !' });
-            }
-            console.log(comments)
-            res.status(200).json(comments);
-            /*if (articles) {
-                res.status(200).json(articles);
-            } else {
-                res.status(400).json({ error: 'Aucun article trouvé!' });
-            }*/
+    .then(article => {
+        if (!article) {
+            return res.status(401).json({ error: "Article inconnu !"});
+        }
+
+        models.Comment.findAll({
+            order: [
+                ['createdAt', 'DESC']
+            ]
         })
-        .catch(error => {
-            res.status(400).json({ error: 'Impossible ' });
-        });
+            .then(comments => {
+                if (!comments) {
+                    return res.status(401).json({ error: 'Aucun commentaire trouvé !' });
+                }
+                console.log(comments)
+                res.status(200).json(comments);
+                /*if (articles) {
+                    res.status(200).json(articles);
+                } else {
+                    res.status(400).json({ error: 'Aucun article trouvé!' });
+                }*/
+            })
+            .catch(error => {
+                res.status(400).json({ error: 'Pas possible !' });
+            });
+    })
+    .catch(error => {
+        res.status(400).json({ error: 'Impossible !' });
+    });
 };
 
 

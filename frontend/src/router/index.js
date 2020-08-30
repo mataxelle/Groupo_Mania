@@ -105,7 +105,7 @@ const routes = [
     }
   },
   {
-    path: '/message',
+    path: '/message/:articleId',
     name: 'message',
     component: Message,
     beforeEnter: (to, from, next) => {
@@ -118,7 +118,7 @@ const routes = [
     }
   },
   {
-    path: '/updateMessage',
+    path: '/updateMessage/:articleId',
     name: 'updateMessage',
     component: UpdateMessage,
     beforeEnter: (to, from, next) => {
