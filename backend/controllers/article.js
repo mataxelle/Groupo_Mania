@@ -136,37 +136,48 @@ exports.modifyArticle = (req, res, next) => {
     var title = req.body.title;
     var text = req.body.text;
 
-    models.Article.findOne({
-        where: { id: id },
-        include: [{
-            model: models.User,
-            attributes: ['firstName', 'lastName']
-        }]
+    models.User.findOne({
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+        where: { id: userId }
     })
-        .then(article => {
-            if (!article) {
-                return res.status(401).json({ error: 'Article inconnu !' });
-            }
+    .then(user => {
+        if (!user) {
+            return res.status(401).json({ error: 'Utilisateur inconnu !' });
+        }
 
-            if (article.UserId !== req.userId) {
-                if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
-            }
-
-            models.Article.update({
-                title: title,
-                text: text,
-                updatedAt: new Date()
-            }, {
-                where: {
-                    id: userId
-                }
-            })
-                .then(resultat => {
-                    res.status(200).json({ success: 'Modification effectuée !' })
-                })
-                .catch((error) => res.status(404).json({ error: error }));
+        models.Article.findOne({
+            where: { id: id },
+            include: [{
+                model: models.User,
+                attributes: ['id', 'firstName', 'lastName']
+            }]
         })
-        .catch((error) => res.status(404).json({ error: error }));
+            .then(article => {
+                if (!article) {
+                    return res.status(401).json({ error: 'Article inconnu !' });
+                }
+    
+                if (article.userId !== userId) {
+                    return res.status(401).json({ error: 'Action non possible !' });
+                }
+    
+                models.Article.update({
+                    title: title,
+                    text: text,
+                    updatedAt: new Date()
+                }, {
+                    where: {
+                        id: article.id
+                    }
+                })
+                    .then(resultat => {
+                        res.status(200).json({ success: 'Modification effectuée !' })
+                    })
+                    .catch((error) => res.status(404).json({ error: error }));
+            })
+            .catch((error) => res.status(404).json({ error: error }));
+    })
+    .catch((error) => res.status(404).json({ error: error }));
 
 };
 
@@ -179,34 +190,45 @@ exports.deleteArticle = (req, res, next) => {
 
     const id = req.params.id;
 
-    models.Article.findOne({
-        where: { id: id },
-        include: [{
-            model: models.User,
-            attributes: ['firstName', 'lastName']
-        }]
+    models.User.findOne({
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+        where: { id: userId }
     })
-        .then(article => {
-            if (!article) {
-                return res.status(401).json({ error: 'Article inconnu !' });
-            }
+    .then(user => {
+        if (!user) {
+            return res.status(401).json({ error: 'Utilisateur inconnu !' });
+        }
 
-            if (article.UserId !== req.userId) {
-                if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
-            }
-
-            models.Message.destroy({
-                attributes: ['id', 'titre', 'text'],
-                where: {
-                        id: userId
-                }
-            })
-                .then(resultat => {
-                    res.status(200).json({ success: 'Article supprimé !' })
-                    .catch((error) => res.status(404).json({ error: error }));
-                })
+        models.Article.findOne({
+            where: { id: id },
+            include: [{
+                model: models.User,
+                attributes: ['id', 'firstName', 'lastName']
+            }]
         })
-        .catch((error) => res.status(404).json({ error: error }));
+            .then(article => {
+                if (!article) {
+                    return res.status(401).json({ error: 'Article inconnu !' });
+                }
+    
+                if (article.userId !== userId) {
+                    return res.status(401).json({ error: 'Action non possible !' });
+                }
+    
+                models.Article.destroy({
+                    attributes: ['id', 'titre', 'text'],
+                    where: {
+                            id: id
+                    }
+                })
+                    .then(resultat => {
+                        res.status(200).json({ success: 'Article supprimé !' })
+                        .catch(error => res.status(404).json({ error: error }));
+                    })
+            })
+            .catch(error => res.status(404).json({ error: error }));
+    })
+    .catch(error => res.status(404).json({ error: error }));
 };
 
 

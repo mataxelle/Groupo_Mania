@@ -1,41 +1,54 @@
 <template>
-    <v-container>
-        <v-card v-for="comment in comments" :key="comment.id" :comment="comment">
-            <v-img></v-img>
-            <v-row>
-              <v-col>
-              <v-card-text>De : {{ comment.userId }} </v-card-text>
-            </v-col>
-            <v-col>
-              <v-card-text>à : {{ comment.createdAt }}</v-card-text>
-            </v-col>
-            </v-row>
-            <v-card-text>{{ comment.commentaire }}</v-card-text>
-        </v-card>
-    </v-container>
+  <v-container>
+    <v-card v-for="comment in comments" :key="comment.id" :comment="comment">
+      <v-row>
+        <v-col>
+          <v-card-text>De : {{ comment.userId }}</v-card-text>
+        </v-col>
+        <v-col>
+          <v-row justify="end" class="margin">
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on" text color="red" small @click="deleteComment">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
+              <span>Supprimer</span>
+            </v-tooltip>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-card-text>{{ comment.commentaire }}</v-card-text>
+      <v-card-text>à : {{ comment.createdAt }}</v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
 import axios from "axios";
 
-const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userToken = JSON.parse(localStorage.getItem("userTkn"));
 
 export default {
-    
-    data () {
-        return {
-            comments: {},
-            user: {}
-        }
-    },
+  data() {
+    return {
+      comments: {},
+      user: {},
+    };
+  },
 
-     mounted() {
+  mounted() {
     axios
-      .get("http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment", {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
+      .get(
+        "http://localhost:3000/api/articles/" +
+          this.$route.params.articleId +
+          "/comment",
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
         }
-      })
+      )
       .then((response) => {
         this.user = response.data;
         this.comments = response.data;
@@ -44,13 +57,17 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-
-    },
-
-    /*computed:  {
-        avatar () {
-            return 'https://api.adorable.io/avatars/48/' + this.comment.name.toString().toLowerCase().trim().replace(/[\s\W-]+/g, '-')  + '@adorable.io.png'
-        }
-    }*/
-}
+  },
+};
 </script>
+
+<style scoped>
+
+.v-card {
+  margin: 20px;
+}
+
+.margin {
+  margin-right: 30px;
+}
+</style>

@@ -41,7 +41,7 @@ exports.router = (function () {
 
     apiRoutes.get('/articles/:id/comment', commentCtrl.getComment);
 
-    apiRoutes.delete('/articles/:id/comment', commentCtrl.deleteComment);
+    apiRoutes.delete('/articles/:id/comment/:id', commentCtrl.deleteComment);
 
     apiRoutes.post('/articles/:id/like', articleCtrl.likeOrDislike);
 

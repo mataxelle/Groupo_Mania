@@ -14,7 +14,12 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: {    // La relation de la clé étrangère ne doit pas être null
             allowNull: false
           }
-        })
+        });
+
+        models.Article.hasMany(models.Comment, {
+          foreignKey: 'articleId',
+          as: 'comment'
+        });
       }
     }
   });

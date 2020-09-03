@@ -13,9 +13,12 @@
             <v-col>
               <v-row justify="end" class="margin">
                 <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }" >
+                  <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on" text color="green" small>
-                      <router-link :to="{ name: 'updateMessage', params: { articleId: article.id }}" class="color">
+                      <router-link
+                        :to="{ name: 'updateMessage', params: { articleId: article.id }}"
+                        class="color"
+                      >
                         <v-icon>mdi-lead-pencil</v-icon>
                       </router-link>
                     </v-btn>
@@ -83,7 +86,7 @@
 
     <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
 
-    <Comment v-for="comment in comments" :key="comment.id" :comment="comment" />
+    <Comment />
 
     <CommentForm v-on:commented="updateComment" />
 
@@ -148,7 +151,9 @@ export default {
 
     axios
       .get(
-        "http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment",
+        "http://localhost:3000/api/articles/" +
+          this.$route.params.articleId +
+          "/comment",
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -172,25 +177,55 @@ export default {
     },
 
     deleteArticle() {
-      axios.delete("http://localhost:3000/api/aticles/" + this.$route.params.articleId, {
-          headers: {
-            Authorization: `Bearer ${userToken}`
-          },
-        })
+      axios
+        .delete(
+          "http://localhost:3000/api/articles/" + this.$route.params.articleId,
+          {
+            //parviens pas a supprimer ds le front
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        )
         .then((response) => {
           if (response.status == 200) {
-            Swal.fire("Article supprimé !")
+            Swal.fire("Article supprimé !");
           }
           this.$router.replace({
-              name: "actualityWall",
-              params: { message: "Article supprimé avec succès ! " },
-            });
-          localStorage.clear();
+            name: "actualityWall",
+            params: { message: "Article supprimé avec succès ! " },
+          });
         })
         .catch((error) => {
           console.log(error);
         });
-    }
+    },
+  },
+
+  deleteComment() {
+    axios
+      .delete(
+        "http://localhost:3000/api/articles/" +
+          this.$route.params.articleId +
+          "/comment",
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          Swal.fire("Commentaire supprimé !");
+        }
+        /*this.$router.replace({
+          name: "message",
+          params: { message: "Commentaire supprimé avec succès ! " },
+        });*/
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>

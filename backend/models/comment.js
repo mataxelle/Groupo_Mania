@@ -17,20 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     commentaire: DataTypes.STRING
-  }, {
-    /*classMethods: {
-      associate: function(models) {
-        models.Comment.belongsTo(models.Article, {
-          foreignKey: {    // La relation de la clé étrangère ne doit pas être null
-            allowNull: false
-          }
-        })
-      }
-    }*/
-  });
+  }, {});
+  
   Comment.associate = function(models) {
 
-    /*models.User.belongsToMany(models.Article, {
+    models.User.belongsToMany(models.Article, {
       through: models.Comment,
       foreignKey: 'userId',
       otherKey: 'articleId',
@@ -40,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.Comment,
       foreignKey: 'articleId',
       otherKey: 'userId',
-    });*/
+    });
 
     models.Comment.belongsTo(models.User, {
       foreignKey: 'userId',

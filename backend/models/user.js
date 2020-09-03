@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate: function(models) {   // Association du modèle User à d'autres modèles
         models.User.hasMany(models.Article);
+
+        models.User.hasMany(models.Comment);
       }
     }
   });
