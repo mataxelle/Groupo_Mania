@@ -133,7 +133,7 @@ export default {
         console.log(error);
       });
 
-    axios
+    /*axios
       .get("http://localhost:3000/api/users/profil", {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -144,7 +144,7 @@ export default {
       })
       .catch((error) => {
         console.log(error);
-      });
+      });*/
   },
 
   /*methods: {

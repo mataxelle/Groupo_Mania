@@ -149,7 +149,7 @@ export default {
         console.log(error);
       });
 
-    axios
+    /*axios
       .get(
         "http://localhost:3000/api/articles/" +
           this.$route.params.articleId +
@@ -168,7 +168,7 @@ export default {
       })
       .catch((error) => {
         console.log(error);
-      });
+      });*/
   },
 
   methods: {
@@ -181,7 +181,6 @@ export default {
         .delete(
           "http://localhost:3000/api/articles/" + this.$route.params.articleId,
           {
-            //parviens pas a supprimer ds le front
             headers: {
               Authorization: `Bearer ${userToken}`,
             },
@@ -200,32 +199,6 @@ export default {
           console.log(error);
         });
     },
-  },
-
-  deleteComment() {
-    axios
-      .delete(
-        "http://localhost:3000/api/articles/" +
-          this.$route.params.articleId +
-          "/comment",
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      )
-      .then((response) => {
-        if (response.status == 200) {
-          Swal.fire("Commentaire supprimé !");
-        }
-        /*this.$router.replace({
-          name: "message",
-          params: { message: "Commentaire supprimé avec succès ! " },
-        });*/
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   },
 };
 </script>

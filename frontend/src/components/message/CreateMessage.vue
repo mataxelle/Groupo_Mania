@@ -76,8 +76,7 @@ export default {
   },
 
   methods: {
-    msgForm(e) {
-      e.preventDefault();
+    msgForm() {
 
       if (this.title == null || this.text == null) {
         return false;

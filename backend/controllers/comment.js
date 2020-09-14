@@ -43,7 +43,7 @@ exports.createComment = (req, res, next) => {
                         articleId: articleId,
                         userId: userId
                     })
-                        .then(commentaire => {
+                        .then(comment => {
                             return res.status(201).json({ commentId: comment.id, message: 'Commentaire créé !' }) // retourne l'id du nouveau commentaire
                         })
                         .catch(error => {
@@ -111,37 +111,41 @@ exports.deleteComment = (req, res, next) => {
     var userId = auth.getUserId(headerAuth);
 
     const id = req.params.id;
-    const articleId = req.params.id;
 
-    models.Comment.findOne({
-        where: { id: id },
-        include: [{
-            model: models.Article,
-        }, {
-            model: models.User,
-            attributes: ['firstName', 'lastName']
-        }]
+    models.User.findOne({
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+        where: { id: userId }
     })
-    .then(commentaire => {
-        if (!commentaire) {
-            return res.status(401).json({ error: 'Commentaire inconnu !' });
+    .then(user => {
+        if (!user) {
+            return res.status(401).json({ error: 'Utilisateur inconnu !' });
         }
 
-        if (comment.UserId !== req.userId) {
-            //if (!req.isAdmin) return res.status(401).json({ error: 'Action non possible !' });
-        }
-
-        models.Comment.destroy({
-            attributes: ['id', 'commentaire'],
-            where: {
-                id: id
-            }
+        models.Comment.findOne({
+            where: { id: id }
         })
-        .then(resultat => {
-            res.status(200).json({ success: 'Commentaire supprimé !' })
-        })
-        .catch((error) => res.status(404).json({ error: error }));
+            .then(comment => {
+                if (!comment) {
+                    return res.status(401).json({ error: 'Commentaire inconnu !' });
+                }
+    
+                if (comment.userId !== userId) {
+                    return res.status(401).json({ error: 'Action non possible !' });
+                }
+    
+                models.Comment.destroy({
+                    attributes: ['id','commentaire'],
+                    where: {
+                            id: id
+                    }
+                })
+                    .then(resultat => {
+                        res.status(200).json({ success: 'Commentaire supprimé !' })
+                    })
+                   .catch(error => res.status(404).json({ error: 'ici' }));
+            })
+            .catch(error => res.status(404).json({ error: 'par ici' }));
     })
-    .catch((error) => res.status(404).json({ error: error }));
+    .catch(error => res.status(404).json({ error: 'non ici' }));
 
 };

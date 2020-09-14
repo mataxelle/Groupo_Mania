@@ -26,6 +26,7 @@
 
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem("userTkn"));
 
@@ -58,11 +59,32 @@ export default {
         console.log(error);
       });
   },
+
+  methods: {
+    deleteComment() {
+      axios
+        .delete(
+          "http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment/" + this.$route.params.commentId,
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          if (response.status == 200) {
+            Swal.fire("Commentaire supprimé !");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
 };
 </script>
 
 <style scoped>
-
 .v-card {
   margin: 20px;
 }
