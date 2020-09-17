@@ -16,7 +16,7 @@ exports.router = (function () {
 
     apiRoutes.post('/auth/logout/', userCtrl.logout);
 
-    //apiRoutes.get('/users/',  userCtrl.getAllUsers);
+    apiRoutes.get('/users/',  userCtrl.getAllUsers);
 
     apiRoutes.get('/users/profil/', userCtrl.getUserProfil);
 

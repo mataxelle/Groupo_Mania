@@ -177,6 +177,10 @@ h1 {
   white-space: normal;
 }
 
+.v-application a {
+  text-decoration: none;
+}
+
 .size {
   color: rgb(199, 61, 61);
   font-size: larger;
@@ -192,7 +196,7 @@ h1 {
 
 .ifArticle {
   text-align: center;
-  margin: 20px 0px;
+  margin: 50px 0px;
 }
 
 .color {

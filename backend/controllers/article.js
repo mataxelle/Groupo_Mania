@@ -99,13 +99,6 @@ exports.getAllArticle = (req, res, next) => {
         order: [
             ['createdAt', 'DESC']
           ]
-        /* attributes: (fields !== '*' && fields !== null) ? fields.split(',') : null,
-         limit: (!isNaN(limit)) ? limit : null,
-         offset: (!isNaN(offset)) ? offset : null,  */
-        /*include: [{ // Inclure la table User
-            model: models.User,
-            attributes: ['firstName', 'lastName'] // Afficher nom et prénom
-        }]*/
     })
         .then(articles => {
             if (!articles) {
@@ -113,11 +106,6 @@ exports.getAllArticle = (req, res, next) => {
             }
             console.log(articles)
             res.status(200).json(articles);
-            /*if (articles) {
-                res.status(200).json(articles);
-            } else {
-                res.status(400).json({ error: 'Aucun article trouvé!' });
-            }*/
         })
         .catch(error => {
             res.status(400).json({ error: 'Impossible ' });

@@ -38,15 +38,17 @@ export default {
         return false;
       }
         
-      axios.post("http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment", this.comment, {
+      axios.post("http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment/", {comment: this.comment}, {
         headers: {
           Authorization: `Bearer ${userToken}`
         }
       })
         .then(response => {
-            this.$emit('commented', response.data);
-            this.comment = ""; // vider
-            Swal.fire("Commentaire ajouté !");
+          localStorage.setItem("comment", JSON.stringify(response.data.comment))
+          localStorage.setItem("commentId", JSON.stringify(response.data.comment.id))
+          this.$emit('commented', response.data.comment)
+          this.comment = ""; // vider
+          Swal.fire("Commentaire ajouté !");
         })
         .catch(error => {
           console.log(error);

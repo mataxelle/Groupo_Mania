@@ -163,13 +163,14 @@ exports.logout = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
 
-  models.User.findAll({
+  models.User.findOne({
     where: {
       isAdmin: 1
     }
   })
   .then(admin => {
-    if (!admin) { console.log('not admin')
+    if (!admin) {
+      return res.status(401).json({ error: 'Pas admin !' });
   }
     models.User.findAll({
       order: [
@@ -179,15 +180,7 @@ exports.getAllUsers = (req, res, next) => {
       .then(users => res.status(200).json(users))
       .catch(error => res.status(500).json({ error: 'Aucune données !' }))
   })
-  .catch(error => res.status(500).json({ error }))
-
-  /*models.User.findAll({
-    order: [
-      ['createdAt', 'DESC']
-    ]
-  })
-    .then(users => res.json(users))
-    .catch(error => res.status(500).json({ error: 'Aucune données !' }))*/
+  .catch(error => res.status(500).json({ error }));
 }
 
 

@@ -8,7 +8,7 @@ exports.createComment = (req, res, next) => {
     var headerAuth = req.headers['authorization'];
     var userId = auth.getUserId(headerAuth);
 
-    var commentaire = req.body.commentaire;
+    var commentaire = req.body.comment;
     console.log(req.body);
 
     var articleId = req.params.id;
@@ -38,13 +38,13 @@ exports.createComment = (req, res, next) => {
                         return res.status(401).json({ error: 'Article inconnu !' });
                     }
 
-                    models.Comment.create({
+                    const comment = models.Comment.create({
                         commentaire: commentaire,
                         articleId: articleId,
                         userId: userId
                     })
                         .then(comment => {
-                            return res.status(201).json({ commentId: comment.id, message: 'Commentaire créé !' }) // retourne l'id du nouveau commentaire
+                            return res.status(201).json({ comment, message: 'Commentaire créé !' }) // retourne l'id du nouveau commentaire
                         })
                         .catch(error => {
                             return res.status(400).json({ error: 'Pas de création' })

@@ -31,15 +31,17 @@ import Swal from "sweetalert2";
 const userToken = JSON.parse(localStorage.getItem("userTkn"));
 
 export default {
+  props: ['comments'],
+
   data() {
     return {
-      comments: {},
+      //comments: {},
       user: {},
     };
   },
 
   mounted() {
-    axios
+    /*axios
       .get(
         "http://localhost:3000/api/articles/" +
           this.$route.params.articleId +
@@ -57,7 +59,7 @@ export default {
       })
       .catch((error) => {
         console.log(error);
-      });
+      });*/
   },
 
   methods: {

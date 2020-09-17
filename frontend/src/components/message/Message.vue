@@ -86,7 +86,7 @@
 
     <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
 
-    <Comment />
+    <Comment :comments="comments" />
 
     <CommentForm v-on:commented="updateComment" />
 
@@ -103,9 +103,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem("userTkn"));
-//const userId = JSON.parse(localStorage.getItem("userId"));
-
-//const articleId = JSON.parse(localStorage.getItem('articleId'));
 
 export default {
   name: "Message",
@@ -121,7 +118,7 @@ export default {
       user: {},
       article: {},
       loading: false,
-      comments: {},
+      comments: [],
     };
   },
 
@@ -149,7 +146,7 @@ export default {
         console.log(error);
       });
 
-    /*axios
+    axios
       .get(
         "http://localhost:3000/api/articles/" +
           this.$route.params.articleId +
@@ -168,12 +165,12 @@ export default {
       })
       .catch((error) => {
         console.log(error);
-      });*/
+      });
   },
 
   methods: {
     updateComment(comment) {
-      this.comments.push(comment);
+      this.comments.unshift(comment); // unshift permet de d'ajouter le commentaire en tête de liste.
     },
 
     deleteArticle() {
