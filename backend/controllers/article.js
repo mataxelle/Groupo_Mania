@@ -98,7 +98,11 @@ exports.getAllArticle = (req, res, next) => {
     models.Article.findAll({
         order: [
             ['createdAt', 'DESC']
-          ]
+        ],
+        include: [{
+            model: models.User,  //User s'affiche avec "s"; pk?
+            attributes: [ 'firstName' ]
+          }]
     })
         .then(articles => {
             if (!articles) {

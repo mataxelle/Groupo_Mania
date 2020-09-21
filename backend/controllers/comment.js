@@ -64,13 +64,13 @@ exports.createComment = (req, res, next) => {
 exports.getComment = (req, res, next) => {
 
     var articleId = req.params.id;
+    console.log(articleId)
 
     models.Article.findOne({
-        where: { id: articleId },
-        /*include: [{
+        include: [{
             model: models.User,
             attributes: ['firstName', 'lastName']
-        }]*/
+        }]
     })
         .then(article => {
             if (!article) {
@@ -80,27 +80,26 @@ exports.getComment = (req, res, next) => {
             models.Comment.findAll({
                 order: [
                     ['createdAt', 'DESC']
-                ]
+                ],
+                include: [{
+                    model: models.Article,
+                    as: 'article'
+                }]
             })
                 .then(comments => {
                     if (!comments) {
                         return res.status(401).json({ error: 'Aucun commentaire trouvé !' });
                     }
-                    console.log(comments)
+                    //console.log(comments)
                     res.status(200).json(comments);
-                    /*if (articles) {
-                        res.status(200).json(articles);
-                    } else {
-                        res.status(400).json({ error: 'Aucun article trouvé!' });
-                    }*/
                 })
                 .catch(error => {
                     res.status(400).json({ error: 'Pas possible !' });
                 });
         })
-        .catch(error => {
-            res.status(400).json({ error: 'Impossible !' });
-        });
+        //.catch(error => {
+            //res.status(400).json({ error: 'Impossible !' });
+        //});
 };
 
 

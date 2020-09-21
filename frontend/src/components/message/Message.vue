@@ -7,10 +7,12 @@
         <v-list-item-content>
           <v-row>
             <v-col>
-              <v-list-item-title>Titre : {{ article.title }}</v-list-item-title>
+              <v-list-item-title>Titre : 
+                <span class="titleArt">{{ article.title }}</span>
+              </v-list-item-title>
               <v-list-item-subtitle>De : {{ article.userId }}</v-list-item-subtitle>
             </v-col>
-            <v-col>
+            <v-col v-if="article.userId">
               <v-row justify="end" class="margin">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -41,9 +43,9 @@
 
       <v-img></v-img>
 
-      <v-card-text>{{ article.text }}</v-card-text>
+      <v-card-text class="ArtColor">{{ article.text }}</v-card-text>
 
-      <v-card-text>Publié le : {{ article.createdAt }}</v-card-text>
+      <v-card-text class="end">Publié le : {{ article.createdAt }}</v-card-text>
 
       <v-row class="align-center mx-3">
         <v-col>
@@ -86,7 +88,7 @@
 
     <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
 
-    <Comment :comments="comments" />
+    <Comment :comments="comments" v-on:supprimer="cancel" /> <!--Composant enfant-->
 
     <CommentForm v-on:commented="updateComment" />
 
@@ -173,6 +175,8 @@ export default {
       this.comments.unshift(comment); // unshift permet de d'ajouter le commentaire en tête de liste.
     },
 
+    cancel() {},
+
     deleteArticle() {
       axios
         .delete(
@@ -208,5 +212,24 @@ export default {
 
 .margin {
   margin-right: 30px;
+}
+
+.v-application a {
+  text-decoration: none;
+}
+
+.titleArt {
+  color: rgb(199, 61, 61);
+  font-size: larger;
+}
+
+.ArtColor {
+  color: rgb(13, 14, 14) !important;
+  font-size: larger;
+}
+
+.end {
+  text-align: end;
+  font-size: xx-small;
 }
 </style>

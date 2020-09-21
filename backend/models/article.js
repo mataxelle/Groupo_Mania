@@ -13,12 +13,13 @@ module.exports = (sequelize, DataTypes) => {
         models.Article.belongsTo(models.User, {
           foreignKey: {    // La relation de la clé étrangère ne doit pas être null
             allowNull: false
-          }
+          },
+          //as: 'author'
         });
 
         models.Article.hasMany(models.Comment, {
           foreignKey: 'articleId',
-          as: 'comment'
+          as: 'comment' //article comments
         });
       }
     }

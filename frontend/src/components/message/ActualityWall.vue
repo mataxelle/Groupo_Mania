@@ -192,6 +192,7 @@ h1 {
 
 .x-small {
   font-size: xx-small;
+  text-align: end;
 }
 
 .ifArticle {
