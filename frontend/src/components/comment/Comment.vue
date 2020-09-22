@@ -3,9 +3,9 @@
     <v-card v-for="(comment, index) in filterComments" :key="comment.id" :comment="comment">
       <v-row>
         <v-col>
-          <v-card-text>De : {{ comment.userId }}</v-card-text>
+          <v-card-text>De : {{ comment.userId }} </v-card-text>
         </v-col>
-        <v-col>
+        <v-col v-if="comment.userId === user.id || user.id === 1">
           <v-row justify="end" class="margin">
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
@@ -39,6 +39,21 @@ export default {
     };
   },
 
+  mounted() {
+    axios
+      .get("http://localhost:3000/api/users/profil", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        this.user = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+
   methods: {
     deleteComment(index, id) {
       axios
@@ -66,8 +81,8 @@ export default {
     },
   },
 
-  computed: {
-    
+  computed: { //Propriété calculé qui prend un objet: une fonction qui retourne le résultat
+
     filterComments() {
      try {
        return this.comments.filter(comment => comment.articleId == this.$route.params.articleId) //filter permet de filtrer les comments liés à un article

@@ -7,12 +7,13 @@
         <v-list-item-content>
           <v-row>
             <v-col>
-              <v-list-item-title>Titre : 
+              <v-list-item-title>
+                Titre :
                 <span class="titleArt">{{ article.title }}</span>
               </v-list-item-title>
-              <v-list-item-subtitle>De : {{ article.userId }}</v-list-item-subtitle>
+              <v-list-item-subtitle>De : {{ article.userId }} </v-list-item-subtitle>
             </v-col>
-            <v-col v-if="article.userId">
+            <v-col v-if="article.userId === user.id || user.id === 1">
               <v-row justify="end" class="margin">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -88,7 +89,8 @@
 
     <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
 
-    <Comment :comments="comments" v-on:supprimer="cancel" /> <!--Composant enfant-->
+    <Comment :comments="comments" v-on:supprimer="cancel" />
+    <!--Composant enfant-->
 
     <CommentForm v-on:commented="updateComment" />
 
@@ -149,6 +151,19 @@ export default {
       });
 
     axios
+      .get("http://localhost:3000/api/users/profil", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        this.user = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
       .get(
         "http://localhost:3000/api/articles/" +
           this.$route.params.articleId +
@@ -175,7 +190,9 @@ export default {
       this.comments.unshift(comment); // unshift permet de d'ajouter le commentaire en tête de liste.
     },
 
-    cancel() {},
+    cancel() {
+      //A terminer
+    },
 
     deleteArticle() {
       axios
