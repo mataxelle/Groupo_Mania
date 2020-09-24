@@ -15,7 +15,7 @@ const PASSWORD_REGEX = /^(?=.*\d).{7,12}$/;
 
 exports.signup = (req, res) => {
 
-  var firstName = req.body.firstName;
+  var firstName = req.body.firstName;   
   var lastName = req.body.lastName;
   var email = req.body.email;
   var password = req.body.password;
@@ -60,13 +60,13 @@ exports.signup = (req, res) => {
     .then(userFound => {
       if (!userFound) {  // S'il existe pas
 
-        bcrypt.hash(password, 10, function (err, bcryptedPassword) { // hacher et saler le mot de passe
-          const newUser = models.User.create({
+        bcrypt.hash(password, 10, function (err, bcryptedPassword) { // le module bcrypt permet hacher et saler le mot de passe
+          const newUser = models.User.create({  //  Création d'un utilisateur qui sera ensuite enregistré dans la base de données
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: bcryptedPassword, // mot de passe crypté
-            isAdmin: false
+            isAdmin: false // Pour forcer quil ne soit pas admin.
           })
             .then(createUser => {
               return res.status(201).json({ userId: createUser.id, message: 'Utilisateur créé !' }) // retourne l'id du nouvel utilisateur
@@ -112,13 +112,13 @@ exports.login = (req, res, next) => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur inconnu !' });
       }
-      bcrypt.compare(password, user.password)
+      bcrypt.compare(password, user.password)  // bcrypt permet de comparer le mp entré par le user et celui ds la bdd
         .then(valid => {
           if (!valid) {
             return res.status(401).json({ error: 'Mot de passe incorrect !' });
           }
-          res.status(200).json({
-            userId: user.id,
+          res.status(200).json({    // Si le résultat est positif
+            userId: user.id,       // retourne l'user et le token
             isAdmin: user.isAdmin,
             token: jwt.sign(
               {
@@ -141,8 +141,8 @@ exports.login = (req, res, next) => {
 exports.logout = (req, res, next) => {
 
   
-  var headerAuth  = req.headers['authorization'];
-  var userId      = auth.getUserId(headerAuth);
+  var headerAuth  = req.headers['authorization'];  // récupération de l'en-tête authorization de la requête
+  var userId      = auth.getUserId(headerAuth); // appel du mdware auth et ensuite appel de getUserId tout en passant en param l'en-tête d'autorisation
 
   models.User.findOne({
     attributes: ['id', 'firstName', 'lastName', 'email', 'isAdmin'],

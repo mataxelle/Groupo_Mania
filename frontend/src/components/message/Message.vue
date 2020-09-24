@@ -13,7 +13,7 @@
               </v-list-item-title>
               <v-list-item-subtitle>De : {{ article.userId }} </v-list-item-subtitle>
             </v-col>
-            <v-col v-if="article.userId === user.id || user.id === 1">
+            <v-col v-if="article.userId === user.id || user.id === 1">   <!--affichache conditionné-->
               <v-row justify="end" class="margin">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
@@ -185,7 +185,7 @@ export default {
       });
   },
 
-  methods: {
+  methods: {  //permet de définir des fonctions auxquelles l'application aura accès
     updateComment(comment) {
       this.comments.unshift(comment); // unshift permet de d'ajouter le commentaire en tête de liste.
     },

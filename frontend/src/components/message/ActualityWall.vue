@@ -112,14 +112,14 @@ export default {
     //Footer
   },
 
-  data: () => {
+  data: () => {    //stocke les données afin de pouvoir les réutiliser via la syntaxe en moustache.
     return {
       user: {},
       articles: {},
     };
   },
 
-  mounted() {
+  mounted() {   //représente le moment durant lequel le composant va être rendu sur la page
     axios
       .get("http://localhost:3000/api/articles", {
         headers: {
@@ -132,29 +132,7 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-
-    /*axios
-      .get("http://localhost:3000/api/users/profil", {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      })
-      .then((response) => {
-        this.user = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });*/
   },
-
-  /*methods: {
-    readComment() {
-      this.$router.push({
-        name: "message",
-        params: { articleId: article.id},
-      });
-    },
-  },*/
 };
 </script>
 

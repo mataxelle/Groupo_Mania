@@ -1,18 +1,17 @@
 const jwt = require('jsonwebtoken'); // Créer et vérifier les token
 
 
-// Création de TOKEN pour l'authentification
 
 module.exports = {
-  parseAuthorization: function(authorization) {
-    return (authorization != null) ? authorization.replace('Bearer ', '') : null;
+  parseAuthorization: function(authorization) {                                    // vérification que la chaîne de caract authorization est non null et
+    return (authorization != null) ? authorization.replace('Bearer ', '') : null; // récupération du token
   },
   getUserId: function(authorization) {
-    var userId = -1;
+    var userId = -1; // pour s'assurer qu'on ne fait pas des requêtes sur qqc qui n'existe pas
     var token = module.exports.parseAuthorization(authorization);
-    if(token != null) {
+    if(token != null) {     // vérification si le token est diffetrent de null
       try {
-        var jwtToken = jwt.verify(token, process.env.S_TOKEN);
+        var jwtToken = jwt.verify(token, process.env.S_TOKEN);  // verify pour décoder notre token. Si celui-ci n'est pas valide, une erreur sera générée
         if(jwtToken != null)
           userId = jwtToken.userId;
       } catch(err) { }
@@ -20,22 +19,3 @@ module.exports = {
     return userId;
   }
 }
-
-
-
-/*module.exports = (req, res, next) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.S_TOKEN);
-    const userId = decodedToken.userId;
-    if (req.body.userId && req.body.userId !== userId) {
-      throw 'User ID non valable';
-    } else {
-      next();
-    }
-  } catch {
-    res.status(401).json({
-      error: new Error('Requête non authentifiée !')
-    });
-  }
-};*/

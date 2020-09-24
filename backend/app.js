@@ -26,11 +26,11 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.urlencoded( {extended: false} ));
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // Pour toutes les routes de l'application, bodyParser transformera le coprs de la requête en objet json utilisable
 
 ////////// Chemin d'accès des endpoints ////////
 app.use('/images', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/', apiRoutes);
 
-module.exports = app;
+module.exports = app;  //////// Exportation du server //////

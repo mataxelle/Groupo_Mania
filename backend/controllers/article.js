@@ -7,6 +7,7 @@ const ITEMS_LIMIT = 100;
 // Création d'un article
 exports.createArticle = (req, res, next) => {
 
+    // récupération de l'en-tête d'authentification
     var headerAuth  = req.headers['authorization'];
     var userId      = auth.getUserId(headerAuth);
 

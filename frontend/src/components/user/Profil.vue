@@ -86,7 +86,7 @@ export default {
     };
   },
 
-  created() {
+  created() {   //représente la durée pendant laquelle le composant est en construction
     axios
       .get("http://localhost:3000/api/users/profil", {
         headers: {
@@ -103,7 +103,7 @@ export default {
       });
   },
 
-  methods: {
+  methods: {  //permet de définir des fonctions auxquelles l'application aura accès
     deleteProfil() {
       axios
         .delete("http://localhost:3000/api/users/profil", {
