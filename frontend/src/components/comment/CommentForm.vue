@@ -5,7 +5,7 @@
 
         <v-form ref="form" @submit.prevent="commentSubmit" class="form">
           <v-textarea outlined v-model="comment" type="text" placeholder="Votre commentaire..." required></v-textarea>
-          <v-card-text>De :</v-card-text>
+          <v-card-text>De : {{ user.id }}</v-card-text>
           <div class="commentSubBtn">
             <v-btn type="submit" small value="submit" color="blue">Poster un commentaire</v-btn>
           </div>
@@ -27,9 +27,25 @@ export default {
     data() {
         return {
             comment: "",
+            user: {},
             isValid: true,
         }
     },
+
+    mounted() {
+    axios
+      .get("http://localhost:3000/api/users/profil", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        this.user = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 
     methods: {
     commentSubmit() {
