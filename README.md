@@ -1,13 +1,13 @@
 # Groupo_Mania
 
 
-_FrontEnd_
+**_FrontEnd_**
 
 . Vue.js
 
 . Vuetify
 
-_BackEnd_
+**_BackEnd_**
 
 . Node.js
 
