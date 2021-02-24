@@ -10,7 +10,7 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>
-                <v-text-field outlined v-model="title" label="Titre" type="text"></v-text-field>
+                <v-text-field outlined v-model="title" label="Titre" type="text" required></v-text-field>
               </v-list-item-title>
               <v-list-item-subtitle>De : {{ user.firstName }}</v-list-item-subtitle>
             </v-list-item-content>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="space">
-          <v-textarea outlined v-model="text" label="Mon message" type="text"></v-textarea>
+          <v-textarea outlined v-model="text" label="Votre message..." type="text" required></v-textarea>
         </div>
 
         <div class="space">

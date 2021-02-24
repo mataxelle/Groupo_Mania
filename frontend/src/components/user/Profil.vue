@@ -5,14 +5,20 @@
     <v-container>
       <v-main>
         <v-card>
-          <v-img src="https://cdn.vuetifyjs.com/images/lists/ali.png" height="300px" dark>
+          <v-img
+            src="https://cdn.vuetifyjs.com/images/lists/ali.png"
+            height="300px"
+            dark
+          >
             <v-card-title>Mon profil</v-card-title>
           </v-img>
 
           <v-list>
             <v-list-item>
               <v-list-item-content>
-                <v-list-item-title>Prénom : {{ user.firstName }}</v-list-item-title>
+                <v-list-item-title
+                  >Prénom : {{ user.firstName }}</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
 
@@ -37,7 +43,9 @@
             <v-col cols="7">Modifier mon compte</v-col>
             <v-col cols="5">
               <v-btn rounded color="purple lighten-2" dark small>
-                <router-link to="/updateProfil" class="color">Modifier</router-link>
+                <router-link to="/updateProfil" class="color"
+                  >Modifier</router-link
+                >
               </v-btn>
             </v-col>
           </v-row>
@@ -53,7 +61,8 @@
                 color="red darken-1"
                 dark
                 small
-              >Supprimer</v-btn>
+                >Supprimer</v-btn
+              >
             </v-col>
           </v-row>
         </v-card>
@@ -86,7 +95,8 @@ export default {
     };
   },
 
-  created() {   //représente la durée pendant laquelle le composant est en construction
+  created() {
+    //représente la durée pendant laquelle le composant est en construction
     axios
       .get("http://localhost:3000/api/users/profil", {
         headers: {
@@ -103,22 +113,23 @@ export default {
       });
   },
 
-  methods: {  //permet de définir des fonctions auxquelles l'application aura accès
+  methods: {
+    //permet de définir des fonctions auxquelles l'application aura accès
     deleteProfil() {
       axios
         .delete("http://localhost:3000/api/users/profil", {
           headers: {
-            Authorization: `Bearer ${userToken}`
+            Authorization: `Bearer ${userToken}`,
           },
         })
         .then((response) => {
           if (response.status == 200) {
-            Swal.fire("Compte supprimé !")
+            Swal.fire("Compte supprimé !");
           }
           this.$router.replace({
-              name: "home",
-              params: { message: "Compte supprimé avec succès ! " },
-            });
+            name: "home",
+            params: { message: "Compte supprimé avec succès ! " },
+          });
           localStorage.clear();
         })
         .catch((error) => {

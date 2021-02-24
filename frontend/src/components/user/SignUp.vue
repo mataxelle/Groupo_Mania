@@ -22,6 +22,10 @@
           </v-form>
         </v-card-text>
       </v-card>
+
+      <v-container class="center">
+        <router-link class="link" to="/signin">Vous avez déjà un compte ?</router-link>
+      </v-container>
     </v-main>
   </v-container>
 </template>
@@ -102,3 +106,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.center {
+  text-align: center;
+}
+
+.link {
+  color: purple;
+  text-decoration: none;
+}
+</style>
