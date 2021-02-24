@@ -1,13 +1,17 @@
 # Groupo_Mania
 
 
-FrontEnd
+**_FrontEnd_**
+
+. _npm run serve_
 
 . Vue.js
 
 . Vuetify
 
-BackEnd
+**_BackEnd_**
+
+. _node server_
 
 . Node.js
 
