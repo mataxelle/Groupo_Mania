@@ -3,9 +3,12 @@
     <v-card v-for="(comment, index) in filterComments" :key="comment.id" :comment="comment">
       <v-row>
         <v-col>
-          <v-card-text>De : {{ comment.userId }} </v-card-text>
+          <v-card-text>
+            <v-icon small>mdi-account-circle</v-icon>
+            {{ comment.userId }}
+          </v-card-text>
         </v-col>
-        <v-col v-if="comment.userId === user.id || user.id === 1">
+        <v-col class="mt-3" v-if="comment.userId === user.id || user.id === 1">
           <v-row justify="end" class="margin">
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">

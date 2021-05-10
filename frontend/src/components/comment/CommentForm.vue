@@ -2,13 +2,16 @@
   <v-container>
     <v-card>
       <div class="comment-box" id="comment">
-
         <v-form ref="form" @submit.prevent="commentSubmit" class="form">
           <v-textarea outlined v-model="comment" type="text" placeholder="Votre commentaire..." required></v-textarea>
-          <v-card-text>De : {{ user.id }}</v-card-text>
-          <div class="commentSubBtn">
+          <v-divider class="mx-4"></v-divider>
+          <v-card-text>
+            <v-icon small>mdi-account-circle</v-icon>
+            {{ user.id }}
+          </v-card-text>
+          <v-card-actions class="commentSubBtn">
             <v-btn type="submit" small value="submit" color="blue">Poster un commentaire</v-btn>
-          </div>
+          </v-card-actions>
           </v-form>
       </div>
     </v-card>
