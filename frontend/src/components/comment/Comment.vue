@@ -8,7 +8,7 @@
             {{ comment.userId }}
           </v-card-text>
         </v-col>
-        <v-col class="mt-3" v-if="comment.userId === user.id || user.id === 1">
+        <v-col class="mt-3" v-if="comment.userId === user.id || user.isAdmin">
           <v-row justify="end" class="margin">
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">

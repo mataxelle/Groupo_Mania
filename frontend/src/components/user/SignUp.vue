@@ -17,8 +17,11 @@
               :rules="passwordRules"
               required
             ></v-text-field>
+            <v-card-actions class="mt-5">
             <v-btn type="submit" value="submit" color="blue">Valider</v-btn>
+            <v-spacer></v-spacer>
             <v-btn @click="clear">Annuler</v-btn>
+            </v-card-actions>
           </v-form>
         </v-card-text>
       </v-card>

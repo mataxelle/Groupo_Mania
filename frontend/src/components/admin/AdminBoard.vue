@@ -2,22 +2,26 @@
   <v-container>
     <BarUpInside />
 
+    <div>
+      {{user.firstName}} et {{user.isAdmin}}
+    </div>
+
     <div class="center">
       <div
-        v-if="user.id !== 1"
+        v-if="!user.isAdmin"
         class="messageAlert"
       >Vous devez être un administrateur pour voir ces informations!</div>
-      <v-btn>
+      <v-btn class="mt-5 mb-5">
         <router-link to="/actualityWall" class="link-color"> Retour vers la page principale
         </router-link>
       </v-btn>
     </div>
 
-    <div v-if="user.id === 1">
+    <div class="mt-5" v-if="user.isAdmin">
       <div class="members" v-if="members.length <= 0">Aucun utilisateur disponible !</div>
 
       <div v-if="members.length > 0">
-        Utilisateurs disponibles par ordre décroisssant :
+        Utilisateurs({{members.length}}) inscrits par ordre décroisssant :
         <v-card v-for="(member, index) in members" :key="member.id" class="eachCard">
           <v-card color="#F3D664">
             <v-card-title>
@@ -38,7 +42,7 @@
             </v-card-text>
           </v-card>
           <v-layout align-center justify-end>
-            <v-btn v-if="user.id === 1" text class="my-2" color="red" small @click="deleteUser(index,member.id)">
+            <v-btn v-if="user.isAdmin" text class="my-2" color="red" small @click="deleteUser(index,member.id)">
               <v-icon>mdi-delete</v-icon>Supprimer utilisateur
             </v-btn>
           </v-layout>

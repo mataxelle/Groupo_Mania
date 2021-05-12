@@ -13,7 +13,7 @@
               </v-list-item-title>
               <v-list-item-subtitle>De : {{ article.userId }} </v-list-item-subtitle>
             </v-col>
-            <v-col v-if="article.userId === user.id || user.id === 1">   <!--affichache conditionné-->
+            <v-col v-if="article.userId === user.id || user.isAdmin">   <!--affichache conditionné-->
               <v-row justify="end" class="margin">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
