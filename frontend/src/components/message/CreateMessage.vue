@@ -97,7 +97,7 @@ export default {
           localStorage.setItem("allContent", JSON.stringify(response.data.allContent))
           localStorage.setItem("articleId", JSON.stringify(response.data.id))
           Swal.fire("Article créé !");
-          this.$router.replace({
+          this.$router.push({
             name: "actualityWall",
             params: { message: response.data.success }
           });

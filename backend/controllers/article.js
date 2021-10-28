@@ -102,7 +102,7 @@ exports.getAllArticle = (req, res, next) => {
         ],
         include: [{
             model: models.User,  //User s'affiche avec "s"; pk?
-            attributes: [ 'firstName' ]
+            as: "user"
           }]
     })
         .then(articles => {

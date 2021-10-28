@@ -5,7 +5,7 @@
     <v-container>
       <v-main>
         <div>
-          <h1 class="titreMur">{{ user.firstName }}</h1>
+          <h1 class="titreMur">Bonjour {{ user.firstName }}</h1>
           <h3 class="titreMur">Messages du mur</h3>
         </div>
 
@@ -18,7 +18,7 @@
                 <v-card-text>Une envie de poster un message ?</v-card-text>
                 <v-divider class="mx-4"></v-divider>
                 <v-card-actions>
-                  <v-btn rounded color="purple lighten-2">
+                  <v-btn color="purple lighten-2">
                     <router-link to="/createMessage" class="color"
                       >C'est par ici</router-link
                     >
