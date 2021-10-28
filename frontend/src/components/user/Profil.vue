@@ -105,8 +105,6 @@ export default {
       })
       .then((response) => {
         this.user = response.data;
-        console.log(this.user);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

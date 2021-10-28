@@ -60,6 +60,26 @@ export default {
     };
   },
 
+  mounted() {
+    axios
+      .get(
+        "http://localhost:3000/api/articles/" + this.$route.params.articleId,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        this.title = response.data.title;
+        this.text = response.data.text;
+        this.loading = false;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+
   methods: {
     msgForm(e) {
       e.preventDefault();

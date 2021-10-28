@@ -40,12 +40,28 @@ export default {
       firstName: "",
       lastName: "",
       email: "",
-      password: "",
       emailRules: [
         v => !!v || "Veuillez renseigner un email valide",
         v => /.+@.+/.test(v) || "Veuillez reseigner un email valide"
       ]
     };
+  },
+
+  mounted() {
+    axios
+      .get("http://localhost:3000/api/users/profil", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        this.firstName = response.data.firstName;
+        this.lastName = response.data.lastName;
+        this.email = response.data.email;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 
   methods: {
