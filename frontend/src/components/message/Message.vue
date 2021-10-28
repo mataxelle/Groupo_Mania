@@ -140,7 +140,6 @@ export default {
       )
       .then((response) => {
         this.article = response.data;
-        this.comments = response.data;
         this.loading = false;
 
         console.log(this.article);

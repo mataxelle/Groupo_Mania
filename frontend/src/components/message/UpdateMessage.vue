@@ -74,7 +74,7 @@ export default {
       };
 
       axios
-        .post("http://localhost:3000/api/articles", allContent, {
+        .put("http://localhost:3000/api/articles/" + this.$route.params.articleId, allContent, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
