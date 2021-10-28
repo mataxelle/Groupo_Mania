@@ -10,15 +10,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: function(models) {   // Association du modèle User à d'autres modèles
-        models.User.hasMany(models.Article, {
-          foreignKey: "userId",
-          as: "articles"
-        });
+        models.User.hasMany(models.Article);
 
-        models.User.hasMany(models.Comment, {
-          foreignKey: "userId",
-          as: "comments"
-        });
+        models.User.hasMany(models.Comment);
       }
     }
   });

@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, DataTypes) => {
   const Article = sequelize.define('Article', {
-    userId: DataTypes.INTEGER,
+    //userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     text: DataTypes.STRING,  // ou TEXT? car longueur
     attachement: DataTypes.STRING,
@@ -13,8 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         models.Article.belongsTo(models.User, {
           foreignKey: {    // La relation de la clé étrangère ne doit pas être null
             allowNull: false
-          },
-          as: 'user'
+          }
         });
 
         models.Article.hasMany(models.Comment, {

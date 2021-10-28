@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('groupo_mania', 'root', process.env.D_BASE_PASS, {
     host: 'localhost',

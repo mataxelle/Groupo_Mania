@@ -42,7 +42,7 @@ exports.createArticle = (req, res, next) => {
                 text: text,
                 likes: 0,
                 attachement: null,
-                userId: userFound.id
+                UserId: userFound.id
             })
                 .then(createArticle => {
                     return res.status(201).json({ articleId: createArticle.id, message: 'Message créé !' }) // retourne l'id du nouvel article
@@ -69,7 +69,7 @@ exports.getOneArticle = (req, res, next) => {
         where: { id: id },
         include: [{
             model: models.User,
-            attributes: ['firstName', 'lastName']
+            attributes: [ 'firstName' ]
         }]
     })
         .then(article => {
@@ -101,8 +101,8 @@ exports.getAllArticle = (req, res, next) => {
             ['createdAt', 'DESC']
         ],
         include: [{
-            model: models.User,  //User s'affiche avec "s"; pk?
-            as: "user"
+            model: models.User,
+            attributes: [ 'firstname' ]
           }]
     })
         .then(articles => {
@@ -142,7 +142,7 @@ exports.modifyArticle = (req, res, next) => {
             where: { id: id },
             include: [{
                 model: models.User,
-                attributes: ['id', 'firstName', 'lastName']
+                attributes: ['firstName']
             }]
         })
             .then(article => {
@@ -184,7 +184,7 @@ exports.deleteArticle = (req, res, next) => {
     const id = req.params.id;
 
     models.User.findOne({
-        attributes: ['id', 'firstName', 'lastName', 'email'],
+        attributes: ['firstName'],
         where: { id: userId }
     })
     .then(user => {
