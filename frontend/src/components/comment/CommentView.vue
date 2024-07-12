@@ -9,7 +9,7 @@
         <v-col>
           <v-card-text>
             <v-icon small>mdi-account-circle</v-icon>
-            {{ comment.userId }}
+            {{ comment.user.firstName }}
           </v-card-text>
         </v-col>
         <v-col class="mt-3" v-if="comment.userId === user.id || user.isAdmin">

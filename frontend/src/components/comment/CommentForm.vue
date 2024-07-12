@@ -3,16 +3,24 @@
     <v-card>
       <div class="comment-box" id="comment">
         <v-form ref="form" @submit.prevent="commentSubmit" class="form">
-          <v-textarea outlined v-model="comment" type="text" placeholder="Votre commentaire..." required></v-textarea>
+          <v-textarea
+            outlined
+            v-model="comment"
+            type="text"
+            placeholder="Votre commentaire..."
+            required
+          ></v-textarea>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>
             <v-icon small>mdi-account-circle</v-icon>
-            {{ user.id }}
+            {{ user.firstName }}
           </v-card-text>
           <v-card-actions class="commentSubBtn">
-            <v-btn type="submit" small value="submit" color="blue">Poster un commentaire</v-btn>
+            <v-btn type="submit" small value="submit" color="blue"
+              >Poster un commentaire</v-btn
+            >
           </v-card-actions>
-          </v-form>
+        </v-form>
       </div>
     </v-card>
   </v-container>
@@ -22,20 +30,20 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const userToken = JSON.parse(localStorage.getItem('userTkn'));
+const userToken = JSON.parse(localStorage.getItem("userTkn"));
 
 export default {
-    name: "CommentForm",
+  name: "CommentForm",
 
-    data() {
-        return {
-            comment: "",
-            user: {},
-            isValid: true,
-        }
-    },
+  data() {
+    return {
+      comment: "",
+      user: {},
+      isValid: true,
+    };
+  },
 
-    mounted() {
+  mounted() {
     axios
       .get("http://localhost:3000/api/users/profil", {
         headers: {
@@ -50,36 +58,46 @@ export default {
       });
   },
 
-    methods: {
+  methods: {
     commentSubmit() {
-
       if (this.comment == null) {
         return false;
       }
-        
-      axios.post("http://localhost:3000/api/articles/" + this.$route.params.articleId + "/comment/", {comment: this.comment}, {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      })
-        .then(response => {
-          localStorage.setItem("comment", JSON.stringify(response.data.comment))
-          localStorage.setItem("commentId", JSON.stringify(response.data.comment.id))
-          this.$emit('commented', response.data.comment)
+
+      axios
+        .post(
+          "http://localhost:3000/api/articles/" +
+            this.$route.params.articleId +
+            "/comment/",
+          { comment: this.comment },
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          localStorage.setItem(
+            "comment",
+            JSON.stringify(response.data.comment)
+          );
+          localStorage.setItem(
+            "commentId",
+            JSON.stringify(response.data.comment.id)
+          );
+          this.$emit("commented", response.data.comment);
           this.comment = ""; // vider
           Swal.fire("Commentaire ajouté !");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-        
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 .form {
   padding: 50px;
 }

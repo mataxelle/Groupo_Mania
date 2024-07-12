@@ -196,7 +196,7 @@ export default {
       .get(
         "http://localhost:3000/api/articles/" +
           this.$route.params.articleId +
-          "/comment",
+          "/comments",
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
