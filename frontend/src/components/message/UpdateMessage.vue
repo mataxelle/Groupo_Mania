@@ -10,35 +10,54 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>
-                <v-text-field outlined v-model="title" label="Titre" type="text"></v-text-field>
+                <v-text-field
+                  outlined
+                  v-model="title"
+                  label="Titre"
+                  type="text"
+                ></v-text-field>
               </v-list-item-title>
-              <v-list-item-subtitle>De : {{ user.firstName }}</v-list-item-subtitle>
+              <v-list-item-subtitle
+                >De : {{ user.firstName }}</v-list-item-subtitle
+              >
             </v-list-item-content>
           </v-list-item>
         </div>
 
         <div class="space">
-          <v-file-input label="File input" prepend-icon="mdi-camera" outlined dense></v-file-input>
+          <v-file-input
+            label="File input"
+            prepend-icon="mdi-camera"
+            outlined
+            dense
+          ></v-file-input>
         </div>
 
         <div class="space">
-          <v-textarea outlined v-model="text" label="Mon message" type="text"></v-textarea>
+          <v-textarea
+            outlined
+            v-model="text"
+            label="Mon message"
+            type="text"
+          ></v-textarea>
         </div>
 
         <div class="space">
-          <v-btn text color="green accent-4" type="submit" value="submit">Poster</v-btn>
+          <v-btn text color="green accent-4" type="submit" value="submit"
+            >Poster</v-btn
+          >
           <v-btn text color="red accent-4" @click="clear">Annuler</v-btn>
         </div>
       </v-form>
     </v-card>
 
-    <Footer />
+    <FooterView />
   </v-container>
 </template>
 
 <script>
 import BarUpInside from "@/layouts/BarUpInside";
-import Footer from "@/layouts/Footer";
+import FooterView from "@/layouts/FooterView";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -48,7 +67,7 @@ export default {
   name: "UpdateMessage",
   components: {
     BarUpInside,
-    Footer,
+    FooterView,
   },
 
   data() {
@@ -94,11 +113,15 @@ export default {
       };
 
       axios
-        .put("http://localhost:3000/api/articles/" + this.$route.params.articleId, allContent, {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        })
+        .put(
+          "http://localhost:3000/api/articles/" + this.$route.params.articleId,
+          allContent,
+          {
+            headers: {
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        )
         .then((response) => {
           localStorage.setItem(
             "allContent",
@@ -124,7 +147,6 @@ export default {
 </script>
 
 <style scoped>
-
 h1 {
   text-align: center;
 }

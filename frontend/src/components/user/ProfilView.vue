@@ -69,13 +69,13 @@
       </v-main>
     </v-container>
 
-    <Footer />
+    <FooterView />
   </v-container>
 </template>
 
 <script>
 import BarUpInside from "@/layouts/BarUpInside";
-import Footer from "@/layouts/Footer";
+import FooterView from "@/layouts/FooterView";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -83,10 +83,10 @@ const userToken = JSON.parse(localStorage.getItem("userTkn"));
 //const userId = JSON.parse(localStorage.getItem("userId"));
 
 export default {
-  name: "Profil",
+  name: "ProfilView",
   components: {
     BarUpInside,
-    Footer,
+    FooterView,
   },
 
   data() {

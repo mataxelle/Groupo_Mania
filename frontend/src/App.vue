@@ -1,26 +1,24 @@
 <template>
   <v-app>
     <v-main>
-      <router-view><Home /></router-view>
+      <router-view><HomeView /></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import Home from "./components/Home"
+import HomeView from "./components/HomeView";
 
 export default {
   name: "App",
   components: {
-    Home
+    HomeView,
   },
 
   data: () => ({
     //
   }),
-
 };
 </script>
 
-<style>
-</style>
+<style></style>

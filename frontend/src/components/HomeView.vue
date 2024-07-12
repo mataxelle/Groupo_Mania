@@ -11,29 +11,30 @@
         <v-tabs grow color="purple">
           <v-tab>Connexion</v-tab>
         </v-tabs>
-        <Login />
+        <LoginView />
       </v-container>
 
       <v-container class="center">
-          <router-link class="link" to="/signup">Créer un compte si première connexion</router-link>
-        </v-container>
+        <router-link class="link" to="/signup"
+          >Créer un compte si première connexion</router-link
+        >
+      </v-container>
     </v-main>
   </v-container>
 </template>
 
 <script>
-import BarUp from "../layouts/BarUp"
-import Login from "../components/user/Login"
+import BarUp from "../layouts/BarUp";
+import LoginView from "../components/user/LoginView";
 
 export default {
-  name: "Home",
+  name: "HomeView",
   components: {
     BarUp,
-    Login
-  }
+    LoginView,
+  },
 };
 </script>
-
 
 <style scoped>
 .center {

@@ -11,15 +11,21 @@
                 Titre :
                 <span class="titleArt">{{ article.title }}</span>
               </v-list-item-title>
-              <v-list-item-subtitle>De : {{ article.userId }} </v-list-item-subtitle>
+              <v-list-item-subtitle
+                >De : {{ article.userId }}
+              </v-list-item-subtitle>
             </v-col>
-            <v-col v-if="article.userId === user.id || user.isAdmin">   <!--affichache conditionné-->
+            <v-col v-if="article.userId === user.id || user.isAdmin">
+              <!--affichache conditionné-->
               <v-row justify="end" class="margin">
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on" text color="green" small>
                       <router-link
-                        :to="{ name: 'updateMessage', params: { articleId: article.id }}"
+                        :to="{
+                          name: 'updateMessage',
+                          params: { articleId: article.id },
+                        }"
                         class="color"
                       >
                         <v-icon>mdi-lead-pencil</v-icon>
@@ -30,7 +36,14 @@
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" text color="red" small @click="deleteArticle">
+                    <v-btn
+                      v-bind="attrs"
+                      v-on="on"
+                      text
+                      color="red"
+                      small
+                      @click="deleteArticle"
+                    >
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </template>
@@ -56,13 +69,21 @@
             small
             text
             color="blue"
-          >Poster un commentaire</v-btn>
+            >Poster un commentaire</v-btn
+          >
         </v-col>
         <v-col>
           <v-row justify="end" class="margin">
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="blue">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  class="ma-2"
+                  text
+                  icon
+                  color="blue"
+                >
                   <span>
                     {{ article.like }}
                     <v-icon>mdi-thumb-up</v-icon>
@@ -73,7 +94,14 @@
             </v-tooltip>
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn v-bind="attrs" v-on="on" class="ma-2" text icon color="red">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  class="ma-2"
+                  text
+                  icon
+                  color="red"
+                >
                   <span>
                     {{ article.dislike }}
                     <v-icon>mdi-thumb-down</v-icon>
@@ -87,33 +115,35 @@
       </v-row>
     </v-card>
 
-    <div class="noComment" v-if="comments.length <= 0">Aucun commentaire disponible !</div>
+    <div class="noComment" v-if="comments.length <= 0">
+      Aucun commentaire disponible !
+    </div>
 
-    <Comment :comments="comments" v-on:supprimer="cancel" />
+    <CommentView :comments="comments" v-on:supprimer="cancel" />
     <!--Composant enfant-->
 
     <CommentForm v-on:commented="updateComment" />
 
-    <Footer />
+    <FooterView />
   </v-container>
 </template>
 
 <script>
 import BarUpInside from "@/layouts/BarUpInside";
-import Footer from "@/layouts/Footer";
+import FooterView from "@/layouts/FooterView";
 import CommentForm from "../comment/CommentForm";
-import Comment from "../comment/Comment";
+import CommentView from "../comment/CommentView";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 const userToken = JSON.parse(localStorage.getItem("userTkn"));
 
 export default {
-  name: "Message",
+  name: "MessageView",
   components: {
     BarUpInside,
-    Footer,
-    Comment,
+    FooterView,
+    CommentView,
     CommentForm,
   },
 
@@ -184,7 +214,8 @@ export default {
       });
   },
 
-  methods: {  //permet de définir des fonctions auxquelles l'application aura accès
+  methods: {
+    //permet de définir des fonctions auxquelles l'application aura accès
     updateComment(comment) {
       this.comments.unshift(comment); // unshift permet de d'ajouter le commentaire en tête de liste.
     },

@@ -137,7 +137,7 @@
 
 <script>
 import BarUpInside from "@/layouts/BarUpInside";
-//import Footer from "@/layouts/Footer";
+//import FooterView from "@/layouts/FooterView";
 import axios from "axios";
 
 const userToken = JSON.parse(localStorage.getItem("userTkn"));
@@ -148,7 +148,7 @@ export default {
   name: "ActualityWall",
   components: {
     BarUpInside,
-    //Footer
+    //FooterView
   },
 
   data: () => {
