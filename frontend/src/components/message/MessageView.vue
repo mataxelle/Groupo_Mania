@@ -12,7 +12,7 @@
                 <span class="titleArt">{{ article.title }}</span>
               </v-list-item-title>
               <v-list-item-subtitle
-                >De : {{ article.userId }}
+                >De : {{ article.user.firstName }}
               </v-list-item-subtitle>
             </v-col>
             <v-col v-if="article.userId === user.id || user.isAdmin">

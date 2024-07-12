@@ -58,7 +58,7 @@
                     </v-list-item-title>
                     <v-list-item-subtitle>
                       <v-icon small>mdi-account-circle</v-icon>
-                      {{ article.userId }}
+                      {{ article.user.firstName }}
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>

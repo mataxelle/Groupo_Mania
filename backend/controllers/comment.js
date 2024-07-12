@@ -85,7 +85,7 @@ exports.getComments = (req, res, next) => {
       res.status(200).json(comments);
     })
     .catch((error) => {
-      res.status(400).json({ error: "Pas possible !" });
+      res.status(400).json({ error });
     });
 };
 
